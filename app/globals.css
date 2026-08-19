@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/*  TT Norms Pro (commercial, TypeType foundry)                        */
+/*  Drop your licensed .woff2 (and optional .woff) files into          */
+/*  /public/fonts/ using the filenames below. Missing files simply     */
+/*  fall back to the system stack, so the build never breaks.          */
+/* ------------------------------------------------------------------ */
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TTNormsPro-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TTNormsPro-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TTNormsPro-DemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TTNormsPro-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TTNormsPro-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TTNormsPro-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Single family for the whole site, matching the design. */
+  --font-display: "TT Norms Pro", system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-body: "TT Norms Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0d0d0d;
+  color: #0d0d0d;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@layer components {
+  /* Heavy display heading */
+  .display {
+    @apply font-display font-extrabold uppercase leading-[0.95] tracking-tight;
+  }
+}

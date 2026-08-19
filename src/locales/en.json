@@ -1,0 +1,302 @@
+{
+  "nav": {
+    "program": "Program",
+    "terms": "Terms"
+  },
+  "menu": {
+    "program": "Program",
+    "terms": "Requirements"
+  },
+  "hero": {
+    "titleTop": "We don't teach startups",
+    "titleBottom": "We build them together with you.",
+    "body": "In 40 days, you'll bring your project to MVP and first sales. The best ones get investments from $10,000 to $100,000.",
+    "cta": "Apply",
+    "note": "Participation is free. Deadline: 22.22.2026."
+  },
+  "stats": [
+    {
+      "value": "40 days",
+      "label": "Offline, full-time"
+    },
+    {
+      "value": "$10–100K",
+      "label": "Investment based on results"
+    },
+    {
+      "value": "$0",
+      "label": "No payments to us"
+    },
+    {
+      "value": "20",
+      "label": "Teams — and not a single extra"
+    }
+  ],
+  "features": [
+    {
+      "index": "01",
+      "title": "Operator inside your team",
+      "body": "No lectures. Your own tracker and mentors who have built and sold themselves work with you every week: workshops, personal office hours, analysis of your metrics. Plus office, experts, and lawyers — for free."
+    },
+    {
+      "index": "02",
+      "title": "Public ranking",
+      "body": "Every Monday, all teams' numbers are visible to everyone. Traction weighs twice as much as everything else, beautiful slides count for nothing. Inflated numbers — ban, repeated — expulsion."
+    },
+    {
+      "index": "03",
+      "title": "Investment for results",
+      "body": "$10,000 to $100,000 over 40 days — for teams that reached revenue and customers. Decision by numbers. Teams without results get nothing."
+    }
+  ],
+  "timeline": [
+    {
+      "index": "01",
+      "title": "Idea",
+      "meta": "Day 1"
+    },
+    {
+      "index": "02",
+      "title": "MVP launched",
+      "meta": "Week 3"
+    },
+    {
+      "index": "03",
+      "title": "First revenue",
+      "meta": "Week 4"
+    },
+    {
+      "index": "04",
+      "title": "Demo day and investment",
+      "meta": "Week 6"
+    }
+  ],
+  "notACourse": {
+    "heading": "This is not a course.",
+    "forYouTitle": "Apply if",
+    "forYou": [
+      {
+        "index": "01",
+        "body": "You've already invested your own time or money in the idea — and will build it with us or without us."
+      },
+      {
+        "index": "02",
+        "body": "You're ready for 40 days of full commitment and for your numbers to be visible to everyone every week."
+      },
+      {
+        "index": "03",
+        "body": "You need partners who argue, not applaud."
+      }
+    ],
+    "notForYouTitle": "Don't apply if",
+    "notForYou": [
+      {
+        "index": "01",
+        "body": "You came for free office space, mentorship, or a certificate."
+      },
+      {
+        "index": "02",
+        "body": "Your idea is just a pitch, and you're waiting for permission to start."
+      },
+      {
+        "index": "03",
+        "body": "You're counting on advance funding. Here, investment must be earned."
+      }
+    ],
+    "verdictLead": "Almost every rejection comes down to one thing: ",
+    "verdictAccent": "the founder wanted the program more than the company.",
+    "verdictTail": " Prove us wrong."
+  },
+  "cta": {
+    "titleTop": "You'll build this anyway",
+    "titleBottom": "We just speed it up.",
+    "body": "The application takes 2–3 hours. Show us what you've already created and what you've learned from customers. This is the first filter.",
+    "button": "Start the application"
+  },
+  "footer": {
+    "tagline": "The simplest idea becomes the strongest",
+    "telegram": "Telegram",
+    "instagram": "Instagram",
+    "rights": "© 2026 Zero to One"
+  },
+  "apply": {
+    "modalTitle": "Apply now",
+    "intro": {
+      "badge": "Before you start",
+      "body": [
+        "The application takes 2–3 hours. That's on purpose: it's the program's first filter. Answer concretely — names, numbers, links. Pretty phrasing isn't scored, the work you've done is.",
+        "Fill in the form in one sitting: if you close the window, your entries won't be saved."
+      ],
+      "start": "Start application"
+    },
+    "steps": [
+      {
+        "kind": "fields",
+        "block": "Block 1 · Who you are",
+        "title": "Full name",
+        "fields": [
+          {
+            "key": "name",
+            "label": "Full name",
+            "placeholder": "Rahim Ahmedov"
+          }
+        ]
+      },
+      {
+        "kind": "fields",
+        "block": "Block 1 · Who you are",
+        "title": "Phone and Telegram",
+        "fields": [
+          {
+            "key": "phone",
+            "label": "Phone",
+            "placeholder": "+998 90 123 45 67",
+            "type": "tel"
+          },
+          {
+            "key": "telegram",
+            "label": "Telegram",
+            "placeholder": "@yourusername"
+          }
+        ]
+      },
+      {
+        "kind": "fields",
+        "block": "Block 1 · Who you are",
+        "title": "City",
+        "fields": [
+          {
+            "key": "city",
+            "label": "City",
+            "placeholder": "Tashkent"
+          }
+        ]
+      },
+      {
+        "kind": "textarea",
+        "block": "Block 1 · Who you are",
+        "title": "Team",
+        "optional": "Optional",
+        "sublabel": "Who else is on the team? Name, role, commitment (full/part-time). If you're solo — just say so, it's not a minus.",
+        "placeholder": "For example: Alisa (design, full-time), Botir (marketing, part-time)"
+      },
+      {
+        "kind": "textarea",
+        "block": "Block 2 · What you're building",
+        "title": "Your startup in one sentence",
+        "sublabel": "What do you do, for whom, and why is it better than what exists? One sentence.",
+        "placeholder": "For example: A CRM for taxi drivers that automates orders and keeps real-time accounting."
+      },
+      {
+        "kind": "textarea",
+        "block": "Block 2 · What you're building",
+        "title": "Customer and access to them",
+        "sublabel": "Who is your customer — a specific role, segment? And how will you reach the first 10 people this very month — channels, places, contacts?",
+        "placeholder": "For example: Customer: Tashkent taxi drivers (25–45, self-employed). Access: Yandex Go forum, local driver chats, my uncle knows 3 drivers."
+      },
+      {
+        "kind": "textarea",
+        "block": "Block 2 · What you're building",
+        "title": "What's already done",
+        "sublabel": "What have you built, spent or sold for this idea? Be specific: hours, money, a prototype link, number of customers or conversations. \"Nothing yet\" is an honest answer too.",
+        "placeholder": "For example: Spent 60 hours on a prototype, 500k soum on Figma and hosting. Showed it to 8 drivers, three liked it."
+      },
+      {
+        "kind": "textarea",
+        "block": "Block 2 · What you're building",
+        "title": "Last three conversations with customers",
+        "sublabel": "Write your last three conversations with real potential customers: who you spoke to (role), what exactly they said, what you understood. If there were none — say so honestly and explain who you'll talk to this week.",
+        "placeholder": "For example:\n1. Akbar (driver): \"I lose a whole day tracking trips right now.\" → Understood: there's a real problem, automation is needed.\n2. Samarbek: \"I have an Excel sheet, but it has errors.\" → could be a customer, but needs to see it first.\n3. Haven't spoken yet. I'll reach Nina via Telegram this week."
+      },
+      {
+        "kind": "textarea",
+        "block": "Block 2 · What you're building",
+        "title": "First revenue",
+        "sublabel": "Where does the first money come from in the next 6 months? Who pays, why, first price.",
+        "placeholder": "Drivers pay $2/month for automation. First customer — my acquaintance Akbar (starts in September)."
+      },
+      {
+        "kind": "textarea",
+        "block": "Block 2 · What you're building",
+        "title": "If we reject you",
+        "sublabel": "If we reject you, what will you do?",
+        "placeholder": "I'll build it anyway. I've already arranged hosting for September, raised $1,500 for marketing, and scheduled 20 conversations for the summer."
+      },
+      {
+        "kind": "checklist",
+        "block": "Block 3 · Terms",
+        "title": "Terms of participation",
+        "options": [
+          "I understand: 40 days is offline full-time, with no parallel work or study.",
+          "I follow the open-leaderboard and honest-numbers rule: inflated metrics — ban, repeat — removal.",
+          "I understand: before day one — pre-work, 5 customer conversations by template.",
+          "I understand: the $10–100K investment is at the end and by result, not guaranteed and with no advance."
+        ],
+        "note": "Each checkbox is a psychological and legal confirmation. Those who aren't ready drop off here, before the interview."
+      },
+      {
+        "kind": "video",
+        "block": "Block 4 · Video",
+        "title": "Video · 2 minutes",
+        "sublabel": "Record 2 minutes with no editing, a phone camera is enough, in any of the three languages. Two questions: why should you specifically solve this problem? What have you done in the last 30 days to get closer to a solution?",
+        "video": {
+          "label": "Video",
+          "dropTitle": "Choose a file or drop it here",
+          "dropHint": "MP4, MOV (max. 100MB)",
+          "uploadBtn": "Upload",
+          "or": "Or",
+          "linkLabel": "Or paste a link",
+          "linkPlaceholder": "YouTube (unlisted) or Google Drive — link",
+          "uploading": "Uploading…",
+          "uploaded": "Uploaded",
+          "failed": "Upload failed",
+          "retry": "Retry",
+          "remove": "Remove",
+          "cancel": "Cancel",
+          "sizeOf": "of"
+        }
+      },
+      {
+        "kind": "links",
+        "block": "Block 5 · Links",
+        "title": "Links",
+        "optional": "Optional",
+        "fields": [
+          {
+            "key": "link_proto",
+            "label": "Prototype or landing",
+            "placeholder": "https://..."
+          },
+          {
+            "key": "link_pitch",
+            "label": "Pitch deck",
+            "placeholder": "https://..."
+          },
+          {
+            "key": "link_metrics",
+            "label": "Metrics screenshot or repository",
+            "placeholder": "https://..."
+          }
+        ]
+      }
+    ],
+    "nav": {
+      "back": "Back",
+      "next": "Next",
+      "submit": "Submit application"
+    },
+    "success": {
+      "title": "Application received",
+      "body": "Thank you! We've received your application. It's now under review. Once the review is complete, we'll let you know the result.",
+      "close": "Close"
+    },
+    "errors": {
+      "required": "Please fill in this field",
+      "phone": "Enter a valid phone number",
+      "telegram": "Telegram username must start with @",
+      "url": "Enter a valid link (https://...)",
+      "checklist": "Confirm all the terms to continue",
+      "video": "Upload a video file or add a link"
+    }
+  }
+}

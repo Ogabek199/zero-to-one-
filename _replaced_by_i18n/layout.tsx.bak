@@ -1,0 +1,36 @@
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
+import { LanguageProvider } from "@/context/LanguageContext";
+import { ApplyProvider } from "@/context/ApplyContext";
+import { ApplyModal } from "@/components/apply/ApplyModal";
+
+export const metadata: Metadata = {
+  title: "Zero to One — Biz startaplarga o'qitmaymiz",
+  description:
+    "40 kun davomida loyihangizni MVP va birinchi sotuvlargacha olib boramiz. Eng yaxshilari $10 000 dan $100 000 gacha investitsiya oladi.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0D0D0D",
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="uz">
+      <body className="font-sans">
+        <LanguageProvider>
+          <ApplyProvider>
+            {children}
+            <ApplyModal />
+          </ApplyProvider>
+        </LanguageProvider>
+      </body>
+    </html>
+  );
+}

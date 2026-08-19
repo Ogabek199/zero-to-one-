@@ -1,0 +1,302 @@
+{
+  "nav": {
+    "program": "Dastur",
+    "terms": "Shartlar"
+  },
+  "menu": {
+    "program": "DASTUR",
+    "terms": "SHARTLAR"
+  },
+  "hero": {
+    "titleTop": "Biz startaplarga o'qitmaymiz",
+    "titleBottom": "Biz ularni sizbilon birga quramiz.",
+    "body": "40 kun davomida siz loyihasini MVP va birinchi sotuvlargacha olib borasiz. Eng yaxshilari 10 000 dan 100 000 dollaragucha investitsiya oladi.",
+    "cta": "Ariza topshirish",
+    "note": "Qatnashish - bepul. Muddati — 22.22.2026."
+  },
+  "stats": [
+    {
+      "value": "40 kun",
+      "label": "Oflayn, to'liq ish vaqti"
+    },
+    {
+      "value": "$10–100K",
+      "label": "Natijalar asosida investitsiya"
+    },
+    {
+      "value": "0 so'm",
+      "label": "Bizga hech qanday to'lovlar yo'q"
+    },
+    {
+      "value": "20",
+      "label": "Jamoa - va ortiqcha hech nima yo'q"
+    }
+  ],
+  "features": [
+    {
+      "index": "01",
+      "title": "Jamoa ichida operator",
+      "body": "Lektsiyalar emas. O'z treker va mentorlar - ular o'zlari qurilib sotdilar, har hafta sizbilon ishlaydi: vorkshoplar, shaxsiy office hours, sizning raqamlaringizni tahlil. Plyus ofis, mutaxassislar va yuriskonsultlar - bepul."
+    },
+    {
+      "index": "02",
+      "title": "Ochiq reyting",
+      "body": "Har juma kuni barcha jamoalarning raqamlari barcha ko'radi. Trekshn qolgan qismdan ikki marta vazni ko'p. Chiroyli slaydlar - nol. Yuqori ko'rsatilgan raqamlar - ban, takroriy - chetlashtirilish."
+    },
+    {
+      "index": "03",
+      "title": "Natija asosida investitsiya",
+      "body": "40 kun davomida 10 000 dan 100 000 dollaragucha - daromad va mijozlarga etib borgan jamoalarga. Qaror raqamlar asosida qilinadi. Natija bo'lmagan jamoa hech nima olmaydi."
+    }
+  ],
+  "timeline": [
+    {
+      "index": "01",
+      "title": "G'oya",
+      "meta": "1-kun"
+    },
+    {
+      "index": "02",
+      "title": "MVP ishga tushirildi",
+      "meta": "3-hafta"
+    },
+    {
+      "index": "03",
+      "title": "Birinchi daromad",
+      "meta": "4-hafta"
+    },
+    {
+      "index": "04",
+      "title": "Demo kun va investitsiya",
+      "meta": "6-hafta"
+    }
+  ],
+  "notACourse": {
+    "heading": "Bu kurs emas.",
+    "forYouTitle": "Qo'llan, agar",
+    "forYou": [
+      {
+        "index": "01",
+        "body": "Siz allaqachon g'oyaga o'zingiz vaqt yoki pul sarflagan - va uni bizbilon yoki bizsiz qurasiz."
+      },
+      {
+        "index": "02",
+        "body": "Siz 40 kun to'liq ish vaqtiga tayyor va sizning raqamlaringiz har hafta barcha ko'rishi qabul qilasiz."
+      },
+      {
+        "index": "03",
+        "body": "Sizga tanqid qiluvchi, ammo olovlanmaydigun sheriklar kerak."
+      }
+    ],
+    "notForYouTitle": "Qo'llan masalan agar",
+    "notForYou": [
+      {
+        "index": "01",
+        "body": "Siz bepul ofis, mentorshib yoki sertifikat uchun keldingiz."
+      },
+      {
+        "index": "02",
+        "body": "Sizning g'oyangiz taqdimot - va siz boshlanishga ruhsat kutayapsiz."
+      },
+      {
+        "index": "03",
+        "body": "Siz avansot pulga hisob qilsangiz. Bu yerda investitsiya earned."
+      }
+    ],
+    "verdictLead": "Deyarli barcha rad etishlarning sababi bitta: ",
+    "verdictAccent": "Founder dasturni o'z kompaniyasidan ko'ra ko'proo xohladi.",
+    "verdictTail": " Bizga aksini ko'rsating."
+  },
+  "cta": {
+    "titleTop": "Buning har holda qurasiz",
+    "titleBottom": "Biz faqat tezlashtiramiz.",
+    "body": "Ariza 2-3 soat vaqt oladi. Siz allaqachon nima qilgangiz va mijozlardan nima o'rgangingizni ko'rsating. Bu birinchi filter.",
+    "button": "Arizani boshlash"
+  },
+  "footer": {
+    "tagline": "Eng sodda g'oya eng kuchli bo'ladi",
+    "telegram": "Telegram",
+    "instagram": "Instagram",
+    "rights": "© 2026 Zero to One"
+  },
+  "apply": {
+    "modalTitle": "Ariza topshirish",
+    "intro": {
+      "badge": "Boshlashdan oldin",
+      "body": [
+        "Ariza 2-3 soat oladi. Bu ataylab shunday: u dasturning birinchi filtri. Aniq javob bering — ismlar, raqamlar, havolalar. Chiroyli iboralar baholanmaydi, qilingan ish baholanadi.",
+        "Formani bitta o'tirishda to'ldiring: agar oynani yopsangiz, kiritilgan ma'lumotlar saqlanmaydi."
+      ],
+      "start": "Arizani boshlash"
+    },
+    "steps": [
+      {
+        "kind": "fields",
+        "block": "1-blok · Siz kimsiz",
+        "title": "Ism va familiya",
+        "fields": [
+          {
+            "key": "name",
+            "label": "Ism va familiya",
+            "placeholder": "Rahim Ahmedov"
+          }
+        ]
+      },
+      {
+        "kind": "fields",
+        "block": "1-blok · Siz kimsiz",
+        "title": "Telefon va Telegram",
+        "fields": [
+          {
+            "key": "phone",
+            "label": "Telefon",
+            "placeholder": "+998 90 123 45 67",
+            "type": "tel"
+          },
+          {
+            "key": "telegram",
+            "label": "Telegram",
+            "placeholder": "@yourusername"
+          }
+        ]
+      },
+      {
+        "kind": "fields",
+        "block": "1-blok · Siz kimsiz",
+        "title": "Shahar",
+        "fields": [
+          {
+            "key": "city",
+            "label": "Shahar",
+            "placeholder": "Toshkent"
+          }
+        ]
+      },
+      {
+        "kind": "textarea",
+        "block": "1-blok · Siz kimsiz",
+        "title": "Jamoa",
+        "optional": "Ixtiyoriy",
+        "sublabel": "Jamoada yana kim bor? Ism, rol, bandlik (to'liq/qisman). Yolg'iz bo'lsangiz — shunday yozing, bu minus emas.",
+        "placeholder": "Masalan: Alisa (dizayn, to'liq bandlik), Botir (marketing, qisman)"
+      },
+      {
+        "kind": "textarea",
+        "block": "2-blok · Nima qurayapsiz",
+        "title": "Startapni bitta jumlada",
+        "sublabel": "Nima qilasiz, kim uchun va nima uchun mavjudidan yaxshi? Bitta jumla.",
+        "placeholder": "Masalan: Taksi haydovchilari uchun buyurtmalarni avtomatlashtirish va real vaqtda hisob-kitob qiluvchi CRM."
+      },
+      {
+        "kind": "textarea",
+        "block": "2-blok · Nima qurayapsiz",
+        "title": "Mijoz va unga kirish",
+        "sublabel": "Mijozingiz kim — aniq rol, segment? Va shu oyning o'zida birinchi 10 kishiga qanday yetib borasiz — kanallar, joylar, tanishlar?",
+        "placeholder": "Masalan: Mijoz: Toshkentdagi taksi haydovchilari (25-45 yosh, mustaqil ishlaydi). Kirish: Yandex Go forumi, mahalliy haydovchilar chatlari, amakim 3 ta haydovchini taniydi."
+      },
+      {
+        "kind": "textarea",
+        "block": "2-blok · Nima qurayapsiz",
+        "title": "Allaqachon nima qilingan",
+        "sublabel": "Bu g'oya uchun nima qurdingiz, sarfladingiz yoki sotdingiz? Aniq: soatlar, pul, prototip havolasi, mijozlar yoki suhbatlar soni. «Hozircha hech narsa» — ham halol javob.",
+        "placeholder": "Masalan: Prototipga 60 soat sarfladim, Figma va hosting uchun 500 ming so'm. 8 ta haydovchiga ko'rsatdim, uchtasiga yoqdi."
+      },
+      {
+        "kind": "textarea",
+        "block": "2-blok · Nima qurayapsiz",
+        "title": "Mijozlar bilan oxirgi uchta suhbat",
+        "sublabel": "Haqiqiy potensial mijozlar bilan oxirgi uchta suhbatni yozing: kim bilan gaplashdingiz (rol), ular aynan nima dedi, siz nimani tushundingiz. Suhbat bo'lmagan bo'lsa — halol yozing va shu hafta kim bilan gaplashishingizni tushuntiring.",
+        "placeholder": "Masalan:\n1. Akbar (haydovchi): «Hozir sayohatlarni hisobga olish uchun butun kunni yo'qotaman.» → Tushundim: muammo bor, avtomatlashtirish kerak.\n2. Samarbek: «Menda Excel jadvali bor, lekin unda xatolar bor.» → mijoz bo'lishi mumkin, lekin avval ko'rinish kerak.\n3. Hali suhbat qilmadim. Shu hafta Telegram orqali Nina bilan gaplashaman."
+      },
+      {
+        "kind": "textarea",
+        "block": "2-blok · Nima qurayapsiz",
+        "title": "Birinchi daromad",
+        "sublabel": "Yaqin 6 oyda birinchi pul qayerdan keladi? Kim to'laydi, nima uchun, birinchi narx.",
+        "placeholder": "Haydovchilar avtomatlashtirish uchun oyiga $2 obuna to'laydi. Birinchi mijoz — mening tanishim Akbar (sentyabrda boshlanadi)."
+      },
+      {
+        "kind": "textarea",
+        "block": "2-blok · Nima qurayapsiz",
+        "title": "Agar rad etsak",
+        "sublabel": "Agar biz sizga rad javobini bersak, nima qilasiz?",
+        "placeholder": "Baribir quraman. Sentyabr uchun hosting bilan allaqachon kelishdim, marketing uchun $1500 yig'dim, yozga 20 ta suhbat rejalashtirdim."
+      },
+      {
+        "kind": "checklist",
+        "block": "3-blok · Shartlar",
+        "title": "Ishtirok shartlari",
+        "options": [
+          "Tushunaman: 40 kun — bu oflayn to'liq bandlik, parallel ish va o'qishsiz.",
+          "Ommaviy reyting va halol raqamlar qoidasini qilaman: bo'rttirilgan ko'rsatkichlar — ban, takrorlansa — chetlatish.",
+          "Tushunaman: dasturning birinchi kunigacha — pre-work, shablon bo'yicha mijozlar bilan 5 ta suhbat.",
+          "Tushunaman: $10-100K sarmoya — yakunda va natija uchun, kafolatlanmagan va avans berilmaydi."
+        ],
+        "note": "Har bir checkbox — psixologik va yuridik tasdiq. Tayyor bo'lmaganlar shu yerda, intervyudan oldin ajraladi."
+      },
+      {
+        "kind": "video",
+        "block": "4-blok · Video",
+        "title": "Video · 2 daqiqa",
+        "sublabel": "Montajsiz 2 daqiqa yozing, telefon kamerasi yetarli, uchta tildan istalganida. Ikkita savol: nega bu muammoni aynan siz hal qilishingiz kerak? Oxirgi 30 kunda yechimga yaqinlashish uchun nima qildingiz?",
+        "video": {
+          "label": "Video",
+          "dropTitle": "Faylni tanlang yoki bu yerga tashlang",
+          "dropHint": "MP4, MOV (maks. 100MB)",
+          "uploadBtn": "Yuklash",
+          "or": "Yoki",
+          "linkLabel": "Yoki havola joylashtiring",
+          "linkPlaceholder": "YouTube (unlisted) yoki Google Drive — havola",
+          "uploading": "Yuklanmoqda…",
+          "uploaded": "Yuklandi",
+          "failed": "Yuklab bo'lmadi",
+          "retry": "Qayta urinish",
+          "remove": "O'chirish",
+          "cancel": "Bekor qilish",
+          "sizeOf": "/"
+        }
+      },
+      {
+        "kind": "links",
+        "block": "5-blok · Havolalar",
+        "title": "Havolalar",
+        "optional": "Ixtiyoriy",
+        "fields": [
+          {
+            "key": "link_proto",
+            "label": "Prototip yoki lending",
+            "placeholder": "https://..."
+          },
+          {
+            "key": "link_pitch",
+            "label": "Pitch-dek",
+            "placeholder": "https://..."
+          },
+          {
+            "key": "link_metrics",
+            "label": "Metrikalar skrinshoti yoki repozitoriy",
+            "placeholder": "https://..."
+          }
+        ]
+      }
+    ],
+    "nav": {
+      "back": "Orqaga",
+      "next": "Keyingisi",
+      "submit": "Arizani yuborish"
+    },
+    "success": {
+      "title": "Ariza qabul qilindi",
+      "body": "Rahmat! Arizangizni qabul qildik. Arizangiz hozirda ko'rib chiqilmoqda. Tekshiruv yakunlangach, natija haqida sizga xabar beramiz.",
+      "close": "Yopish"
+    },
+    "errors": {
+      "required": "Bu maydonni to'ldiring",
+      "phone": "To'g'ri telefon raqamini kiriting",
+      "telegram": "Telegram username @ bilan boshlanishi kerak",
+      "url": "To'g'ri havola kiriting (https://...)",
+      "checklist": "Davom etish uchun barcha shartlarni tasdiqlang",
+      "video": "Video fayl yuklang yoki havola qo'shing"
+    }
+  }
+}
