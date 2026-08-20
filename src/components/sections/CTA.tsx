@@ -15,8 +15,8 @@ export function CTA() {
       <Container className="relative py-16 sm:py-24">
         <div className="relative min-h-[300px] sm:min-h-[400px]">
           {/* Mirrored stepped block */}
-          <div className="absolute inset-0 hidden sm:block">
-            <StepBlock flipX flipY />
+          <div className="absolute inset-0 block">
+            <StepBlock src="/zero_to_one2.jpg" flipX flipY />
           </div>
 
           <div className="relative z-10">
@@ -27,7 +27,7 @@ export function CTA() {
             </h2>
 
             <div className="mt-16 flex justify-end sm:mt-24">
-              <h3 className="display max-w-lg text-right text-[10vw] leading-[1.02] text-white sm:text-4xl md:text-5xl lg:text-[58px]">
+              <h3 className="display max-w-[550px] text-right mt-12 leading-[1.02] text-white sm:text-4xl md:text-5xl lg:text-[58px]">
                 <span className="box-decoration-clone bg-brand-red px-2 py-0.5">
                   {t.cta.titleBottom}
                 </span>

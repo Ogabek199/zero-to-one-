@@ -15,12 +15,12 @@ export function Stats() {
             {t.stats.map((s) => (
               <div
                 key={s.value}
-                className="border-b border-brand-black py-5 first:pt-0"
+                className="border-b border-brand-black pt-3 first:pt-0"
               >
-                <dt className="display text-2xl text-brand-black sm:text-3xl">
+                <dt className="display font-bold text-[32px] leading-[90%] tracking-[-4%] text-brand-black sm:text-3xl">
                   {s.value}
                 </dt>
-                <dd className="mt-1 font-sans text-base text-brand-muted">
+                <dd className="mt-1 mb-3 font-medium font-sans text-2xl leading-[110%] tracking-[-2%] text-[#666666]">
                   {s.label}
                 </dd>
               </div>

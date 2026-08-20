@@ -1,6 +1,8 @@
 import { clsx } from "@/lib/clsx";
 
 interface StepBlockProps {
+  /** Image source (defaults to /zero_to_one.jpg). */
+  src?: string;
   /** Flip horizontally (used to mirror the shape for the CTA section). */
   flipX?: boolean;
   flipY?: boolean;
@@ -12,7 +14,7 @@ interface StepBlockProps {
  * CTA headlines. It renders /public/zero_to_one.svg — drop your exact SVG in
  * with that filename and it appears here with no code changes.
  */
-export function StepBlock({ flipX, flipY, className }: StepBlockProps) {
+export function StepBlock({ src = "/zero_to_one.jpg", flipX, flipY, className }: StepBlockProps) {
   return (
     <div
       aria-hidden="true"
@@ -20,7 +22,7 @@ export function StepBlock({ flipX, flipY, className }: StepBlockProps) {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/zero_to_one.jpg"
+        src={src}
         alt=""
         className="h-full w-full"
         style={{

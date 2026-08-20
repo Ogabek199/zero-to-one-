@@ -11,7 +11,7 @@ export function Footer() {
     <footer className="bg-white">
       <Container className="py-16 sm:py-24">
         <div className="md:ml-auto md:w-1/2 text-left">
-          <h2 className="display max-w-md text-3xl text-brand-black sm:text-4xl">
+          <h2 className="display max-w-lg text-[32px] leading-[90%] tracking-[-4%] text-brand-black sm:text-4xl">
             {t.footer.tagline}
           </h2>
 
@@ -20,7 +20,7 @@ export function Footer() {
               href="https://t.me/"
               target="_blank"
               rel="noreferrer"
-              className="font-sans text-[15px] text-brand-black/80 transition-colors hover:text-brand-black"
+              className="font-sans text-[16px] text-[#000000] transition-colors hover:text-brand-black"
             >
               {t.footer.telegram}
             </a>
@@ -28,21 +28,22 @@ export function Footer() {
               href="https://instagram.com/"
               target="_blank"
               rel="noreferrer"
-              className="font-sans text-[15px] text-brand-black/80 transition-colors hover:text-brand-black"
+              className="font-sans text-[16px] text-[#000000] transition-colors hover:text-brand-black"
             >
               {t.footer.instagram}
             </a>
           </nav>
 
           <div className="mt-14 flex justify-start">
-            <Logo variant="dark" size="xl" />
+            <Logo variant="dark" size="lg" className="sm:hidden" />
+            <Logo variant="dark" size="xl" className="hidden sm:inline-flex" />
           </div>
         </div>
       </Container>
 
       <div className="bg-brand-black">
-        <Container className="py-5">
-          <p className="text-center font-sans text-[13px] text-white/70">
+        <Container className="py-[32px]">
+        <p className="text-center font-sans leading-[110%] tracking-[-4%] text-[16px] text-[#FFFFFF]">
             {t.footer.rights}
           </p>
         </Container>

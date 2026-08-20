@@ -28,15 +28,15 @@ function Checklist({
         {items.map((item) => (
           <div key={item.index}>
             <span
-              className={`font-sans text-sm font-bold tracking-wider ${
-                isRed ? "text-white" : "text-brand-red"
+              className={`font-sans text-[16px] leading-[90%] font-bold tracking-[-4%] ${
+              isRed ? "text-[#E5E5E5]" : "text-[#DE2A41]"
               }`}
             >
               {item.index}
             </span>
             <p
-              className={`mt-2 max-w-xl font-sans text-[18px] leading-relaxed sm:text-[20px] ${
-                isRed ? "text-brand-red" : "text-white/85"
+              className={`mt-2 max-w-xl font-sans text-2xl leading-[110%] tracking-[-2%] sm:text-[20px] ${
+                isRed ? "text-[#DE2A41]" : "text-[#E5E5E5]"
               }`}
             >
               {item.body}
@@ -55,8 +55,8 @@ export function NotACourse() {
   return (
     <section className="bg-brand-black">
       <Container className="py-16 sm:py-24">
-        <div className="md:ml-auto md:w-[46%] md:pl-8 text-left">
-          <h2 className="display text-5xl text-white sm:text-6xl">
+        <div className="md:ml-auto md:w-1/2 text-left">
+          <h2 className="display text-[64px] max-w-md leading-[90%] tracking-[-4%] text-white sm:text-6xl">
             {n.heading}
           </h2>
 
@@ -73,7 +73,7 @@ export function NotACourse() {
             />
           </div>
 
-          <p className="mt-16 max-w-xl font-sans text-xl font-bold uppercase leading-snug text-white sm:text-2xl">
+          <p className="mt-16 max-w-md font-sans text-[32px] font-bold uppercase tracking-[-4%] leading-[90%] text-white sm:text-2xl">
             {n.verdictLead}
             <span className="text-brand-red">{n.verdictAccent}</span>
             {n.verdictTail}

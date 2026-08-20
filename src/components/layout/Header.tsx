@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import { useLanguage } from "@/context/LanguageContext";
 import { Logo } from "@/components/ui/Logo";
 import { Container } from "@/components/ui/Container";
@@ -9,6 +10,7 @@ import { MobileMenu } from "./MobileMenu";
 
 export function Header() {
   const { t } = useLanguage();
+
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -26,6 +28,7 @@ export function Header() {
           >
             {t.nav.program}
           </a>
+
           <a
             href="#shartlar"
             className="font-sans text-[15px] text-white/85 transition-colors hover:text-white"
@@ -46,7 +49,13 @@ export function Header() {
             aria-label="Open menu"
             className="p-1.5 text-white lg:hidden"
           >
-            <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 30 30"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M5 10H25M5 19H25"
                 stroke="currentColor"
@@ -58,7 +67,10 @@ export function Header() {
         </div>
       </Container>
 
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <MobileMenu
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+      />
     </header>
   );
 }

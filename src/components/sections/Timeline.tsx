@@ -13,16 +13,16 @@ export function Timeline() {
           {t.timeline.map((item) => (
             <div
               key={item.index}
-              className="flex items-center gap-6 border-b border-brand-black py-6 first:border-t sm:gap-12"
+              className="flex items-center gap-6 border-b border-brand-black pt-2 pb-6 first:border-t sm:gap-12"
             >
-              <span className="display shrink-0 text-4xl text-brand-red sm:text-6xl">
+              <span className="display shrink-0 text-[64px] leading-[90%] tracking-[-4%] text-brand-red sm:text-6xl">
                 {item.index}
               </span>
               <div className="w-full md:ml-auto md:w-1/2">
-                <h3 className="display text-xl text-brand-black sm:text-2xl">
+                <h3 className="display text-[32px] leading-[90%] tracking-[-4%] text-brand-black sm:text-2xl">
                   {item.title}
                 </h3>
-                <p className="mt-1 font-sans text-sm text-brand-muted sm:text-base">
+                <p className="mt-1 font-sans font-medium text-2xl leading-[110%] tracking-[-2%] text-[#666666] sm:text-base">
                   {item.meta}
                 </p>
               </div>

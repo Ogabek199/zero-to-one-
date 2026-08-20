@@ -24,7 +24,7 @@ export function Button({
       href={href}
       className={clsx(
         "inline-flex items-center justify-center px-8 py-4",
-        "font-sans text-[13px] font-bold uppercase tracking-[0.08em]",
+        "font-sans text-[16px] leading-[90%] font-bold uppercase tracking-[-4%]",
         "transition-colors duration-200",
         variant === "light" &&
           "bg-white text-brand-red hover:bg-white/90",

@@ -32,7 +32,9 @@ export function Logo({ variant = "light", size = "md", className }: LogoProps) {
   const d = MARK_SIZE[size];
   const stroke = size === "xl" ? 4 : size === "lg" ? 3 : 2;
   const r = d / 2 - stroke / 2 - (large ? 1.5 : 0.5);
-  const overlap = d * 0.86;
+  // Distance between the two circle centres. Set to the sum of the radii
+  // (2 * r) so the circles only kiss at their edges instead of overlapping.
+  const overlap = 2 * r;
 
   return (
     <span

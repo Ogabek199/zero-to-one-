@@ -15,8 +15,8 @@ export function Hero() {
       <Container className="relative pb-14 pt-10 sm:pb-20 sm:pt-16">
         {/* White stepped background graphic (swap /public/zero_to_one.svg) */}
         <div className="relative min-h-[340px] sm:min-h-[440px] lg:min-h-[520px]">
-          <div className="absolute inset-0 hidden sm:block">
-            <StepBlock />
+          <div className="absolute inset-0 block">
+            <StepBlock src="/zero_to_one1.jpg" />
           </div>
 
           {/* Headlines sit on crimson backing boxes so they stay readable
@@ -30,7 +30,7 @@ export function Hero() {
           </div>
 
           <div className="relative z-10 mt-16 flex justify-end sm:mt-28 lg:mt-40">
-            <h2 className="display max-w-xl text-right text-[11vw] leading-[1.02] text-white sm:text-5xl md:text-6xl lg:text-[68px]">
+            <h2 className="display max-w-[764px] mt-12 text-right leading-[1.02] text-white sm:text-5xl md:text-6xl lg:text-[68px]">
               <span className="box-decoration-clone bg-brand-red px-2 py-0.5">
                 {t.hero.titleBottom}
               </span>

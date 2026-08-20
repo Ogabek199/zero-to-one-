@@ -26,13 +26,14 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-50 lg:hidden transition-opacity duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 h-screen lg:hidden transition-opacity duration-300 ${
         open ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
+      style={{ height: "100dvh" }}
       aria-hidden={!open}
     >
       <div className="flex h-full flex-col bg-brand-red">
-        <div className="flex items-center justify-between px-5 py-4">
+        <div className="flex items-center justify-between bg-brand-black px-5 py-3.5">
           <Logo variant="light" size="md" />
           <button
             type="button"
@@ -51,7 +52,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
           </button>
         </div>
 
-        <nav className="flex flex-1 flex-col gap-8 px-5 pt-10">
+        <nav className="flex flex-1 flex-col gap-8 px-5 pt-12">
           <a
             href="#dastur"
             onClick={onClose}
@@ -68,7 +69,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
           </a>
         </nav>
 
-        <div className="flex items-center justify-between px-5 pb-6">
+        <div className="flex flex-col items-start gap-6 px-5 pb-10">
           <LanguageSwitcher tone="onRed" />
           <span className="font-sans text-sm text-white/80">
             {t.footer.rights}

@@ -42,7 +42,7 @@ export function Footer() {
 
       <div className="bg-brand-black">
         <Container className="py-5">
-          <p className="text-center font-sans text-[13px] text-white/70">
+          <p className="text-center font-sans leading-[110%] tracking-[-4%] text-[16px] text-[#FFFFFF]">
             {t.footer.rights}
           </p>
         </Container>
