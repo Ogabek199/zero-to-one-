@@ -1,11 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { upload as uploadToBlob } from "@vercel/blob/client";
 import { useApply } from "@/context/ApplyContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { Logo } from "@/components/ui/Logo";
 import { clsx } from "@/lib/clsx";
 import type { ApplyContent, ApplyStep, ApplyVideoCopy } from "@/data/content";
+import { MAX_VIDEO_BYTES, type ApplyPayload } from "@/lib/apply-types";
 
 type Phase = "intro" | "form" | "success";
 
@@ -16,6 +18,11 @@ interface DraftState {
 
 const EMPTY_DRAFT: DraftState = { values: {}, checks: {} };
 
+/* Fallbacks for locales that predate the submit states. */
+const DEFAULT_SUBMITTING = "…";
+const DEFAULT_SUBMIT_ERROR =
+  "Arizani yuborib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring.";
+
 /* ---- file upload state ---- */
 
 type UploadStatus = "uploading" | "done" | "error";
@@ -23,13 +30,13 @@ type UploadStatus = "uploading" | "done" | "error";
 interface UploadState {
   name: string;
   size: number;
-  /** Bytes "transferred" so far — drives the progress bar. */
+  /** Bytes actually transferred so far — drives the progress bar. */
   loaded: number;
   status: UploadStatus;
+  /** Public Blob URL, set once the upload finishes. */
+  url?: string;
 }
 
-/** 100 MB cap, matching the drop-zone hint. */
-const MAX_VIDEO_BYTES = 100 * 1024 * 1024;
 const UPLOAD_OK_GREEN = "#16a34a";
 
 function formatSize(bytes: number): string {
@@ -132,7 +139,7 @@ const ghostBtn = `${btnBase} border border-brand-black text-brand-black hover:bg
 
 export function ApplyModal() {
   const { isOpen, closeApply } = useApply();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const a = t.apply;
 
   const [phase, setPhase] = useState<Phase>("intro");
@@ -140,10 +147,16 @@ export function ApplyModal() {
   const [draft, setDraft] = useState<DraftState>(EMPTY_DRAFT);
   const [upload, setUpload] = useState<UploadState | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   /** Keeps the picked File so "retry" can re-run the upload. */
   const uploadFileRef = useRef<File | null>(null);
+  /** Lets "cancel" abort an upload that is still in flight. */
+  const uploadAbortRef = useRef<AbortController | null>(null);
+  /** Honeypot: bots fill this in, humans never see it. */
+  const hpRef = useRef<HTMLInputElement>(null);
 
   const total = a.steps.length;
   const current: ApplyStep | undefined = a.steps[step];
@@ -156,23 +169,12 @@ export function ApplyModal() {
     setDraft(EMPTY_DRAFT);
     setUpload(null);
     uploadFileRef.current = null;
+    uploadAbortRef.current?.abort();
+    uploadAbortRef.current = null;
     setErrors({});
+    setSubmitting(false);
+    setSubmitError(null);
   }, [isOpen]);
-
-  /* ---- simulate upload progress while a file is uploading ---- */
-  useEffect(() => {
-    if (upload?.status !== "uploading") return;
-    const id = setInterval(() => {
-      setUpload((u) => {
-        if (!u || u.status !== "uploading") return u;
-        const inc = Math.max(1, Math.round(u.size / 14));
-        const loaded = u.loaded + inc;
-        if (loaded >= u.size) return { ...u, loaded: u.size, status: "done" };
-        return { ...u, loaded };
-      });
-    }, 90);
-    return () => clearInterval(id);
-  }, [upload?.status]);
 
   /* ---- lock the page + escape to close while open ----
      `overflow: hidden` alone does not stop iOS Safari (or Android Chrome)
@@ -276,22 +278,58 @@ export function ApplyModal() {
   const goTo = useCallback((next: number) => {
     setStep(next);
     setErrors({});
+    setSubmitError(null);
     bodyRef.current?.scrollTo({ top: 0 });
   }, []);
 
+  /* ---- final submit ---- */
+
+  const submitApplication = useCallback(async () => {
+    if (submitting) return;
+    setSubmitting(true);
+    setSubmitError(null);
+
+    const payload: ApplyPayload = {
+      locale,
+      values: draft.values,
+      checks: draft.checks,
+      video:
+        upload?.status === "done" && upload.url
+          ? { url: upload.url, name: upload.name, size: upload.size }
+          : null,
+      hp: hpRef.current?.value ?? "",
+    };
+
+    try {
+      const res = await fetch("/api/apply", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error(String(res.status));
+      setPhase("success");
+    } catch {
+      setSubmitError(a.errors.submit ?? DEFAULT_SUBMIT_ERROR);
+    } finally {
+      setSubmitting(false);
+    }
+  }, [a.errors.submit, draft, locale, submitting, upload]);
+
   const handleNext = () => {
-    if (!current) return;
-    const uploadDone = upload?.status === "done";
+    if (!current || submitting) return;
+    const uploadDone = upload?.status === "done" && !!upload.url;
     const stepErrors = validateStep(current, step, draft, uploadDone, a.errors);
     if (Object.keys(stepErrors).length > 0) {
       setErrors(stepErrors);
       return;
     }
     if (step < total - 1) goTo(step + 1);
-    else setPhase("success");
+    else void submitApplication();
   };
 
   const handleBack = () => {
+    if (submitting) return;
     if (step > 0) goTo(step - 1);
     else setPhase("intro");
   };
@@ -308,30 +346,79 @@ export function ApplyModal() {
     });
   }, []);
 
+  /**
+   * Uploads straight from the browser to Blob storage.
+   *
+   * The file never touches our API route — that route only mints a one-hour,
+   * video-only, 100 MB-capped token — so a full-size clip is not squeezed
+   * through the ~4.5 MB serverless body limit.
+   */
   const beginUpload = useCallback(
-    (file: File) => {
+    async (file: File) => {
       uploadFileRef.current = file;
-      const valid =
-        file.type.startsWith("video/") && file.size <= MAX_VIDEO_BYTES;
+      clearVideoErrors();
+
+      if (!file.type.startsWith("video/") || file.size > MAX_VIDEO_BYTES) {
+        setUpload({
+          name: file.name,
+          size: file.size,
+          loaded: 0,
+          status: "error",
+        });
+        return;
+      }
+
+      uploadAbortRef.current?.abort();
+      const controller = new AbortController();
+      uploadAbortRef.current = controller;
+
       setUpload({
         name: file.name,
         size: file.size,
         loaded: 0,
-        status: valid ? "uploading" : "error",
+        status: "uploading",
       });
-      clearVideoErrors();
+
+      try {
+        const result = await uploadToBlob(`applications/${file.name}`, file, {
+          access: "public",
+          handleUploadUrl: "/api/apply/upload",
+          // Parallel chunks with per-chunk retries: what makes a 100 MB
+          // upload survive a shaky mobile connection.
+          // multipart: true,
+          abortSignal: controller.signal,
+          onUploadProgress: ({ loaded }) => {
+            setUpload((u) =>
+              u && u.status === "uploading" ? { ...u, loaded } : u,
+            );
+          },
+        });
+
+        setUpload((u) =>
+          u
+            ? { ...u, loaded: file.size, status: "done", url: result.url }
+            : u,
+        );
+      } catch {
+        // An abort is a user action, not a failure — `clearUpload` already
+        // wiped the card, so only report a genuine error.
+        if (controller.signal.aborted) return;
+        setUpload((u) => (u ? { ...u, status: "error" } : u));
+      }
     },
     [clearVideoErrors],
   );
 
   const clearUpload = useCallback(() => {
+    uploadAbortRef.current?.abort();
+    uploadAbortRef.current = null;
     uploadFileRef.current = null;
     setUpload(null);
   }, []);
 
   const retryUpload = useCallback(() => {
     const f = uploadFileRef.current;
-    if (f) beginUpload(f);
+    if (f) void beginUpload(f);
   }, [beginUpload]);
 
   // Every hook is declared above this guard, so the hook order stays stable
@@ -382,6 +469,18 @@ export function ApplyModal() {
             </svg>
           </button>
         </div>
+
+        {/* Honeypot — off-screen and hidden from assistive tech. A bot fills
+            it in, a person cannot; a filled value is dropped server-side. */}
+        <input
+          ref={hpRef}
+          type="text"
+          name="company_website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-[9999px] h-0 w-0 opacity-0"
+        />
 
         {/* Body */}
         <div
@@ -456,14 +555,35 @@ export function ApplyModal() {
           )}
 
           {phase === "form" && (
-            <div className="flex flex-col-reverse gap-3 sm:grid sm:grid-cols-2">
-              <button type="button" onClick={handleBack} className={ghostBtn}>
-                {a.nav.back}
-              </button>
-              <button type="button" onClick={handleNext} className={primaryBtn}>
-                {isLast ? a.nav.submit : a.nav.next}
-              </button>
-            </div>
+            <>
+              {submitError && (
+                <p className="mb-3 font-sans text-[13px] font-medium text-[#DE2A41]">
+                  {submitError}
+                </p>
+              )}
+              <div className="flex flex-col-reverse gap-3 sm:grid sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  disabled={submitting}
+                  className={clsx(ghostBtn, submitting && "opacity-50")}
+                >
+                  {a.nav.back}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  disabled={submitting}
+                  className={clsx(primaryBtn, submitting && "opacity-70")}
+                >
+                  {submitting
+                    ? (a.nav.submitting ?? DEFAULT_SUBMITTING)
+                    : isLast
+                      ? a.nav.submit
+                      : a.nav.next}
+                </button>
+              </div>
+            </>
           )}
 
           {phase === "success" && (

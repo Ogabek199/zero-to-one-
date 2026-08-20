@@ -5,5 +5,13 @@
 next-env.d.ts
 *.tsbuildinfo
 .DS_Store
-.env*
+# Secrets: every .env variant stays out of git (.env, .env.local,
+# .env.production, .env.development.local, ...). Only the value-free template
+# is tracked.
+.env
+.env.*
+!.env.example
 _to_delete/
+_replaced_by_i18n/
+.vercel
+.env*

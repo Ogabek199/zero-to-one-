@@ -105,13 +105,15 @@ export interface ApplyErrors {
   url: string;
   checklist: string;
   video: string;
+  /** Shown when the submit request itself fails (network / server). */
+  submit?: string;
 }
 
 export interface ApplyContent {
   modalTitle: string;
   intro: { badge: string; body: string[]; start: string };
   steps: ApplyStep[];
-  nav: { back: string; next: string; submit: string };
+  nav: { back: string; next: string; submit: string; submitting?: string };
   success: { title: string; body: string; close: string };
   errors: ApplyErrors;
 }

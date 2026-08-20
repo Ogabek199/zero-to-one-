@@ -285,7 +285,8 @@
     "nav": {
       "back": "Orqaga",
       "next": "Keyingisi",
-      "submit": "Arizani yuborish"
+      "submit": "Arizani yuborish",
+      "submitting": "Yuborilmoqda…"
     },
     "success": {
       "title": "Ariza qabul qilindi",
@@ -298,7 +299,8 @@
       "telegram": "Telegram username @ bilan boshlanishi kerak",
       "url": "To'g'ri havola kiriting (https://...)",
       "checklist": "Davom etish uchun barcha shartlarni tasdiqlang",
-      "video": "Video fayl yuklang yoki havola qo'shing"
+      "video": "Video fayl yuklang yoki havola qo'shing",
+      "submit": "Arizani yuborib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring."
     }
   }
 }

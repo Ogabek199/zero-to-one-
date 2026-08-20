@@ -285,7 +285,8 @@
     "nav": {
       "back": "Back",
       "next": "Next",
-      "submit": "Submit application"
+      "submit": "Submit application",
+      "submitting": "Sending…"
     },
     "success": {
       "title": "Application received",
@@ -298,7 +299,8 @@
       "telegram": "Telegram username must start with @",
       "url": "Enter a valid link (https://...)",
       "checklist": "Confirm all the terms to continue",
-      "video": "Upload a video file or add a link"
+      "video": "Upload a video file or add a link",
+      "submit": "Could not send your application. Check your connection and try again."
     }
   }
 }
