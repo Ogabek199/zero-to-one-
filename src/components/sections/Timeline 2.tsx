@@ -15,7 +15,7 @@ export function Timeline() {
               key={item.index}
               className="flex items-center gap-6 border-b border-brand-black py-6 first:border-t sm:gap-12"
             >
-              <span className="display shrink-0 leading-[90%] tracking-[-4%] text-[64px] text-brand-red sm:text-6xl">
+              <span className="display shrink-0 leading-[90%] tracking-[-4%] text-[64px] text-[#DE2A41] sm:text-6xl">
                 {item.index}
               </span>
               <div className="flex-1">

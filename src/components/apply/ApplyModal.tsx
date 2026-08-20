@@ -326,7 +326,7 @@ export function ApplyModal() {
           {phase === "form" && current && (
             <div>
               <div className="flex items-center justify-between gap-4">
-                <span className="font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-brand-red">
+                <span className="font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-[#DE2A41]">
                   {current.block}
                 </span>
                 <span className="font-sans text-xs font-medium tabular-nums text-brand-black/50">
@@ -381,7 +381,7 @@ export function ApplyModal() {
                 setPhase("form");
                 goTo(0);
               }}
-              className="w-full bg-brand-red px-8 py-3.5 font-sans text-[13px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-red-dark"
+              className="w-full bg-[#DE2A41] px-8 py-3.5 font-sans text-[13px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-[#DE2A41]-dark"
             >
               {a.intro.start}
             </button>
@@ -399,7 +399,7 @@ export function ApplyModal() {
               <button
                 type="button"
                 onClick={handleNext}
-                className="bg-brand-red px-8 py-3.5 font-sans text-[13px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-red-dark"
+                className="bg-[#DE2A41] px-8 py-3.5 font-sans text-[13px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-[#DE2A41]-dark"
               >
                 {isLast ? a.nav.submit : a.nav.next}
               </button>
@@ -410,7 +410,7 @@ export function ApplyModal() {
             <button
               type="button"
               onClick={closeApply}
-              className="w-full bg-brand-red px-8 py-3.5 font-sans text-[13px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-red-dark"
+              className="w-full bg-[#DE2A41] px-8 py-3.5 font-sans text-[13px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-[#DE2A41]-dark"
             >
               {a.success.close}
             </button>
@@ -428,7 +428,7 @@ export function ApplyModal() {
 function IntroBody({ a }: { a: ApplyContent }) {
   return (
     <div>
-      <span className="font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-brand-red">
+      <span className="font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-[#DE2A41]">
         {a.intro.badge}
       </span>
       <div className="mt-6 flex flex-col gap-4">
@@ -465,7 +465,7 @@ const inputBase =
 function ErrorText({ msg }: { msg?: string }) {
   if (!msg) return null;
   return (
-    <p className="mt-2 font-sans text-[12px] font-medium text-brand-red">
+    <p className="mt-2 font-sans text-[12px] font-medium text-[#DE2A41]">
       {msg}
     </p>
   );
@@ -527,8 +527,8 @@ function StepFields({
                 className={clsx(
                   inputBase,
                   err
-                    ? "border-brand-red"
-                    : "border-brand-black/25 focus:border-brand-red",
+                    ? "border-[#DE2A41]"
+                    : "border-brand-black/25 focus:border-[#DE2A41]",
                 )}
               />
               <ErrorText msg={err} />
@@ -553,8 +553,8 @@ function StepFields({
           className={clsx(
             "w-full resize-y border bg-transparent p-3 font-sans text-[15px] leading-relaxed text-brand-black outline-none transition-colors placeholder:text-brand-black/35",
             err
-              ? "border-brand-red"
-              : "border-brand-black/25 focus:border-brand-red",
+              ? "border-[#DE2A41]"
+              : "border-brand-black/25 focus:border-[#DE2A41]",
           )}
         />
         <ErrorText msg={err} />
@@ -581,9 +581,9 @@ function StepFields({
                   className={clsx(
                     "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border transition-colors",
                     checked
-                      ? "border-brand-red bg-brand-red text-white"
+                      ? "border-[#DE2A41] bg-[#DE2A41] text-white"
                       : err
-                        ? "border-brand-red bg-white"
+                        ? "border-[#DE2A41] bg-white"
                         : "border-brand-black/40 bg-white",
                   )}
                 >
@@ -631,8 +631,8 @@ function StepFields({
             if (f) onPickFile(f);
           }}
           className={clsx(
-            "flex cursor-pointer flex-col items-center gap-2 border border-dashed bg-brand-gray/60 px-6 py-8 text-center transition-colors hover:border-brand-red",
-            err ? "border-brand-red" : "border-brand-black/30",
+            "flex cursor-pointer flex-col items-center gap-2 border border-dashed bg-brand-gray/60 px-6 py-8 text-center transition-colors hover:border-[#DE2A41]",
+            err ? "border-[#DE2A41]" : "border-brand-black/30",
           )}
         >
           <span className="font-sans text-[14px] font-medium text-brand-black/80">
@@ -685,8 +685,8 @@ function StepFields({
           className={clsx(
             inputBase,
             err
-              ? "border-brand-red"
-              : "border-brand-black/25 focus:border-brand-red",
+              ? "border-[#DE2A41]"
+              : "border-brand-black/25 focus:border-[#DE2A41]",
           )}
         />
         <ErrorText msg={err} />
@@ -727,7 +727,7 @@ function UploadCard({
       className={clsx(
         "mt-3 flex items-start gap-3 border p-3 transition-colors",
         isError
-          ? "border-brand-red bg-brand-red/[0.04]"
+          ? "border-[#DE2A41] bg-[#DE2A41]/[0.04]"
           : "border-brand-black/15 bg-white",
       )}
     >
@@ -735,7 +735,7 @@ function UploadCard({
       <span
         className={clsx(
           "mt-0.5 shrink-0",
-          isError ? "text-brand-red" : "text-brand-black/35",
+          isError ? "text-[#DE2A41]" : "text-brand-black/35",
         )}
       >
         <svg width="20" height="24" viewBox="0 0 20 24" fill="none">
@@ -835,8 +835,8 @@ function UploadCard({
           )}
 
           {isError && (
-            <span className="flex items-center gap-1.5 text-brand-red">
-              <span className="inline-block h-[7px] w-[7px] rounded-full bg-brand-red" />
+            <span className="flex items-center gap-1.5 text-[#DE2A41]">
+              <span className="inline-block h-[7px] w-[7px] rounded-full bg-[#DE2A41]" />
               {v.failed}
             </span>
           )}
@@ -855,7 +855,7 @@ function UploadCard({
           <button
             type="button"
             onClick={onRetry}
-            className="mt-1.5 font-sans text-[12px] font-semibold text-brand-red underline underline-offset-2 transition-opacity hover:opacity-75"
+            className="mt-1.5 font-sans text-[12px] font-semibold text-[#DE2A41] underline underline-offset-2 transition-opacity hover:opacity-75"
           >
             {v.retry}
           </button>

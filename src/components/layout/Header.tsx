@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useLanguage } from "@/context/LanguageContext";
 import { Logo } from "@/components/ui/Logo";
@@ -12,9 +12,43 @@ export function Header() {
   const { t } = useLanguage();
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Eng tepada doim ko'rinadi
+      if (currentScrollY <= 0) {
+        setShowHeader(true);
+      }
+      // Tepaga scroll qilinsa — ko'rsat
+      else if (currentScrollY < lastScrollY) {
+        setShowHeader(true);
+      }
+      // Pastga scroll qilinsa — yashir
+      else if (currentScrollY > lastScrollY) {
+        setShowHeader(false);
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <header className="sticky top-0 z-40 bg-brand-black">
+    <header
+      className={`fixed top-0 left-0 z-50 w-full bg-brand-black transition-transform duration-300 ${
+        showHeader ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       <Container className="flex items-center justify-between py-3.5">
         <a href="#top" aria-label="Zero to One — home">
           <Logo variant="light" size="md" />
@@ -42,7 +76,6 @@ export function Header() {
             <LanguageSwitcher tone="onDark" />
           </div>
 
-          {/* Hamburger */}
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
@@ -50,16 +83,20 @@ export function Header() {
             className="p-1.5 text-white lg:hidden"
           >
             <svg
-              width="30"
-              height="30"
-              viewBox="0 0 30 30"
+              width="52"
+              height="40"
+              viewBox="0 0 52 40"
               fill="none"
-              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M5 10H25M5 19H25"
-                stroke="currentColor"
-                strokeWidth="2.2"
+                d="M6 12H46"
+                stroke="white"
+                strokeLinecap="round"
+              />
+              <path
+                d="M6 28H46"
+                stroke="white"
                 strokeLinecap="round"
               />
             </svg>

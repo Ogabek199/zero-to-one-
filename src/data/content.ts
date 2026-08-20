@@ -149,6 +149,8 @@ export interface Content {
     tagline: string;
     telegram: string;
     instagram: string;
+    facebook: string;
+    linkedin: string;
     rights: string;
   };
   apply: ApplyContent;

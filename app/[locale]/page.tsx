@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <main>
+      <main className="pt-20">
         <Hero />
         <Stats />
         <Features />

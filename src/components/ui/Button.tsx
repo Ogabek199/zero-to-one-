@@ -27,7 +27,7 @@ export function Button({
         "font-sans text-[16px] leading-[90%] font-bold uppercase tracking-[-4%]",
         "transition-colors duration-200",
         variant === "light" &&
-          "bg-white text-brand-red hover:bg-white/90",
+          "bg-white text-[#DE2A41] hover:bg-white/90",
         fullWidth && "w-full",
         className,
       )}

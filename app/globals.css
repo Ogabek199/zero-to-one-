@@ -62,6 +62,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Anchor targets sit under the sticky header — offset the jump so the
+   section heading is not hidden behind it. */
+section[id] {
+  scroll-margin-top: 72px;
+}
+
+
 html,
 body {
   /* Prevent any element from forcing the page wider than the viewport,
@@ -82,5 +89,33 @@ body {
   /* Heavy display heading */
   .display {
     @apply font-display font-extrabold uppercase leading-[0.95] tracking-tight;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Scroll reveal                                                      */
+/*  Only opacity + transform are animated, so the browser keeps the    */
+/*  work on the compositor (no layout, no paint). See ui/Reveal.tsx.   */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition:
+      opacity 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Without JS the observer never runs, so never hide anything. */
+@media (scripting: none) {
+  .reveal {
+    opacity: 1;
+    transform: none;
   }
 }

@@ -5,45 +5,50 @@ import { useApply } from "@/context/ApplyContext";
 import { Button } from "@/components/ui/Button";
 import { StepBlock } from "@/components/ui/StepBlock";
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
 
 export function CTA() {
   const { t } = useLanguage();
   const { openApply } = useApply();
 
   return (
-    <section id="ariza" className="relative bg-brand-red">
+    <section id="ariza" className="relative bg-[#DE2A41]">
       <Container className="relative py-16 sm:py-24">
-        <div className="relative min-h-[300px] sm:min-h-[400px]">
+        <div className="relative min-h-[200px] sm:min-h-[400px]">
           {/* Mirrored stepped block */}
           <div className="absolute inset-0 block">
             <StepBlock src="/zero_to_one2.jpg" flipX flipY />
           </div>
 
-          <div className="relative z-10">
-            <h2 className="display max-w-xl text-[11vw] leading-[1.02] text-white sm:text-5xl md:text-6xl lg:text-[68px]">
-              <span className="box-decoration-clone bg-brand-red px-2 py-0.5">
+          <Reveal className="relative z-10">
+            <h2 className="display max-w-xl whitespace-pre-line text-[7vw] leading-[1.02] text-white sm:whitespace-normal sm:text-5xl md:text-6xl lg:text-[68px]">
+              <span className="box-decoration-clone bg-[#DE2A41] px-2 py-0.5">
                 {t.cta.titleTop}
               </span>
             </h2>
 
-            <div className="mt-16 flex justify-end sm:mt-24">
-              <h3 className="display max-w-[550px] text-right mt-12 leading-[1.02] text-white sm:text-4xl md:text-5xl lg:text-[58px]">
-                <span className="box-decoration-clone bg-brand-red px-2 py-0.5">
+            <div className="mt-12 flex justify-end sm:mt-24">
+              <h3 className="display mt-0 max-w-[550px] whitespace-pre-line text-right text-[7vw] leading-[1.02] text-white sm:mt-12 sm:whitespace-normal sm:text-4xl md:text-5xl lg:text-[58px]">
+                <span className="box-decoration-clone bg-[#DE2A41] px-2 py-0.5">
                   {t.cta.titleBottom}
                 </span>
               </h3>
             </div>
-          </div>
+          </Reveal>
         </div>
 
-        <div className="relative z-10 mt-10 flex flex-col items-start gap-6 sm:items-end">
-          <p className="max-w-md font-sans text-lg leading-snug text-white sm:text-right">
-            {t.cta.body}
-          </p>
-          <div className="w-full max-w-md">
+        {/* Same single-column treatment as the hero: copy and CTA share
+            one set of edges. */}
+        <Reveal delay={140} className="relative z-10 mt-10 flex justify-start sm:justify-end">
+          <div className="w-full md:w-1/2 md:ml-auto">
+            <p className="max-w-[510px] font-sans text-[20px] leading-[115%] tracking-[-2%] text-white sm:text-[32px] sm:leading-[90%] sm:tracking-[-4%] sm:text-left">
+              {t.cta.body}
+            </p>
+
             <Button
               variant="light"
               fullWidth
+              className="mt-6"
               href="#ariza"
               onClick={(e) => {
                 e.preventDefault();
@@ -53,7 +58,7 @@ export function CTA() {
               {t.cta.button}
             </Button>
           </div>
-        </div>
+        </Reveal>
       </Container>
     </section>
   );
