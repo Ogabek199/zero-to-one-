@@ -124,6 +124,12 @@ function validateStep(
   return e;
 }
 
+/* Footer buttons: full-width and finger-sized on mobile, unchanged on desktop. */
+const btnBase =
+  "w-full px-6 py-4 font-sans text-[13px] font-bold uppercase tracking-[0.08em] transition-colors sm:px-8 sm:py-3.5";
+const primaryBtn = `${btnBase} bg-[#DE2A41] text-white hover:bg-[#B2333C]`;
+const ghostBtn = `${btnBase} border border-brand-black text-brand-black hover:bg-brand-black hover:text-white`;
+
 export function ApplyModal() {
   const { isOpen, closeApply } = useApply();
   const { t } = useLanguage();
@@ -135,6 +141,7 @@ export function ApplyModal() {
   const [upload, setUpload] = useState<UploadState | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const bodyRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   /** Keeps the picked File so "retry" can re-run the upload. */
   const uploadFileRef = useRef<File | null>(null);
 
@@ -167,20 +174,76 @@ export function ApplyModal() {
     return () => clearInterval(id);
   }, [upload?.status]);
 
-  /* ---- lock scroll + escape to close while open ---- */
+  /* ---- lock the page + escape to close while open ----
+     `overflow: hidden` alone does not stop iOS Safari (or Android Chrome)
+     from dragging the page behind the modal, so the body is pinned with
+     `position: fixed` at its current offset and restored — scroll position
+     included — when the modal closes. `left/right/width` keep the pinned
+     body from collapsing or shifting sideways. */
   useEffect(() => {
     if (!isOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+
+    const body = document.body;
+    const html = document.documentElement;
+    const scrollY = window.scrollY;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      width: body.style.width,
+      overflow: body.style.overflow,
+      overscrollBehavior: body.style.overscrollBehavior,
+      htmlOverscroll: html.style.overscrollBehavior,
+    };
+
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
+    body.style.overscrollBehavior = "none";
+    html.style.overscrollBehavior = "none";
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeApply();
     };
     window.addEventListener("keydown", onKey);
+
     return () => {
-      document.body.style.overflow = prev;
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.left = prev.left;
+      body.style.right = prev.right;
+      body.style.width = prev.width;
+      body.style.overflow = prev.overflow;
+      body.style.overscrollBehavior = prev.overscrollBehavior;
+      html.style.overscrollBehavior = prev.htmlOverscroll;
+      window.scrollTo(0, scrollY);
       window.removeEventListener("keydown", onKey);
     };
   }, [isOpen, closeApply]);
+
+  /* ---- swallow touch drags that start outside the scrollable body ----
+     Without this the overlay itself rubber-bands on iOS, which reads as the
+     page moving up/down (and sideways) under the user's finger. */
+  useEffect(() => {
+    if (!isOpen) return;
+    const overlay = overlayRef.current;
+    if (!overlay) return;
+
+    const onTouchMove = (e: TouchEvent) => {
+      const scroller = bodyRef.current;
+      // Multi-touch = pinch zoom; leave it alone.
+      if (e.touches.length > 1) return;
+      if (scroller && scroller.contains(e.target as Node)) return;
+      e.preventDefault();
+    };
+
+    overlay.addEventListener("touchmove", onTouchMove, { passive: false });
+    return () => overlay.removeEventListener("touchmove", onTouchMove);
+  }, [isOpen, phase, step]);
 
   const clearError = useCallback((key: string) => {
     setErrors((prev) => {
@@ -278,8 +341,11 @@ export function ApplyModal() {
   const isLast = step === total - 1;
 
   return (
+    // Mobile: starts under the sticky header and fills the rest of the screen.
+    // sm+: the centred card it has always been.
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6"
+      ref={overlayRef}
+      className="fixed inset-x-0 bottom-0 top-[var(--header-h)] z-[100] flex items-stretch justify-center overscroll-none sm:inset-0 sm:items-center sm:p-6"
       role="dialog"
       aria-modal="true"
       aria-label={a.modalTitle}
@@ -289,13 +355,14 @@ export function ApplyModal() {
         type="button"
         aria-label="Close"
         onClick={closeApply}
-        className="absolute inset-0 bg-brand-black/70 backdrop-blur-sm"
+        tabIndex={-1}
+        className="absolute inset-0 hidden bg-brand-black/70 backdrop-blur-sm sm:block"
       />
 
       {/* Card */}
-      <div className="relative flex max-h-[92vh] w-full max-w-2xl flex-col border border-brand-black bg-white shadow-2xl">
+      <div className="relative flex h-full w-full min-w-0 max-w-none flex-col overflow-hidden border-brand-black bg-white shadow-2xl sm:h-auto sm:max-h-[92vh] sm:max-w-2xl sm:border">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-brand-black px-6 py-4 sm:px-8">
+        <div className="flex shrink-0 items-center justify-between border-b border-brand-black px-5 py-4 sm:px-8">
           <span className="display text-sm tracking-tight text-brand-black sm:text-base">
             {a.modalTitle}
           </span>
@@ -319,23 +386,23 @@ export function ApplyModal() {
         {/* Body */}
         <div
           ref={bodyRef}
-          className="flex-1 overflow-y-auto px-6 py-7 sm:px-8 sm:py-9"
+          className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain px-5 py-6 [-webkit-overflow-scrolling:touch] sm:px-8 sm:py-9"
         >
           {phase === "intro" && <IntroBody a={a} />}
 
           {phase === "form" && current && (
             <div>
               <div className="flex items-center justify-between gap-4">
-                <span className="font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-[#DE2A41]">
+                <span className="min-w-0 font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-[#DE2A41]">
                   {current.block}
                 </span>
-                <span className="font-sans text-xs font-medium tabular-nums text-brand-black/50">
+                <span className="shrink-0 font-sans text-xs font-medium tabular-nums text-brand-black/50">
                   {step + 1}/{total}
                 </span>
               </div>
 
-              <div className="mt-6 flex items-baseline gap-3">
-                <h3 className="display text-xl text-brand-black sm:text-2xl">
+              <div className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 sm:mt-6">
+                <h3 className="display break-words text-xl text-brand-black sm:text-2xl">
                   {current.title}
                 </h3>
                 {current.optional && (
@@ -372,8 +439,9 @@ export function ApplyModal() {
           {phase === "success" && <SuccessBody a={a} />}
         </div>
 
-        {/* Footer */}
-        <div className="border-t border-brand-black/10 px-6 py-4 sm:px-8">
+        {/* Footer — full-width stacked buttons on mobile (primary on top,
+            matching the design), side by side from sm up. */}
+        <div className="shrink-0 border-t border-brand-black/10 px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-8 sm:pb-4">
           {phase === "intro" && (
             <button
               type="button"
@@ -381,37 +449,25 @@ export function ApplyModal() {
                 setPhase("form");
                 goTo(0);
               }}
-              className="w-full bg-[#DE2A41] px-8 py-3.5 font-sans text-[13px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-[#DE2A41]-dark"
+              className={primaryBtn}
             >
               {a.intro.start}
             </button>
           )}
 
           {phase === "form" && (
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="border border-brand-black px-8 py-3.5 font-sans text-[13px] font-bold uppercase tracking-[0.08em] text-brand-black transition-colors hover:bg-brand-black hover:text-white"
-              >
+            <div className="flex flex-col-reverse gap-3 sm:grid sm:grid-cols-2">
+              <button type="button" onClick={handleBack} className={ghostBtn}>
                 {a.nav.back}
               </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                className="bg-[#DE2A41] px-8 py-3.5 font-sans text-[13px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-[#DE2A41]-dark"
-              >
+              <button type="button" onClick={handleNext} className={primaryBtn}>
                 {isLast ? a.nav.submit : a.nav.next}
               </button>
             </div>
           )}
 
           {phase === "success" && (
-            <button
-              type="button"
-              onClick={closeApply}
-              className="w-full bg-[#DE2A41] px-8 py-3.5 font-sans text-[13px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-[#DE2A41]-dark"
-            >
+            <button type="button" onClick={closeApply} className={primaryBtn}>
               {a.success.close}
             </button>
           )}
@@ -459,8 +515,10 @@ function SuccessBody({ a }: { a: ApplyContent }) {
   );
 }
 
+/* 16px on mobile is deliberate: anything smaller makes iOS Safari zoom the
+   viewport on focus, which drags the whole page around. */
 const inputBase =
-  "w-full border-0 border-b bg-transparent pb-2 font-sans text-[15px] text-brand-black outline-none transition-colors placeholder:text-brand-black/35";
+  "w-full border-0 border-b bg-transparent pb-2 font-sans text-[16px] text-brand-black outline-none transition-colors placeholder:text-brand-black/35 sm:text-[15px]";
 
 function ErrorText({ msg }: { msg?: string }) {
   if (!msg) return null;
@@ -551,7 +609,7 @@ function StepFields({
           rows={6}
           aria-invalid={!!err}
           className={clsx(
-            "w-full resize-y border bg-transparent p-3 font-sans text-[15px] leading-relaxed text-brand-black outline-none transition-colors placeholder:text-brand-black/35",
+            "w-full resize-y border bg-transparent p-3 font-sans text-[16px] leading-relaxed text-brand-black outline-none transition-colors placeholder:text-brand-black/35 sm:text-[15px]",
             err
               ? "border-[#DE2A41]"
               : "border-brand-black/25 focus:border-[#DE2A41]",
@@ -631,7 +689,7 @@ function StepFields({
             if (f) onPickFile(f);
           }}
           className={clsx(
-            "flex cursor-pointer flex-col items-center gap-2 border border-dashed bg-brand-gray/60 px-6 py-8 text-center transition-colors hover:border-[#DE2A41]",
+            "flex cursor-pointer flex-col items-center gap-2 border border-dashed bg-brand-gray/60 px-4 py-7 text-center transition-colors hover:border-[#DE2A41] sm:px-6 sm:py-8",
             err ? "border-[#DE2A41]" : "border-brand-black/30",
           )}
         >

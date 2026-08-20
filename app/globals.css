@@ -56,6 +56,10 @@
   --font-display: "TT Norms Pro", system-ui, -apple-system, "Segoe UI",
     sans-serif;
   --font-body: "TT Norms Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Height of the sticky header: logo mark (46px) + 2 × 14px padding.
+     The apply modal starts right below it on mobile. */
+  --header-h: 74px;
 }
 
 html {
@@ -76,6 +80,8 @@ body {
      (and its hamburger button) off the right edge on mobile. */
   overflow-x: hidden;
   max-width: 100%;
+  /* No sideways rubber-band / swipe-to-navigate on touch devices. */
+  overscroll-behavior-x: none;
 }
 
 body {

@@ -21,8 +21,6 @@ export const viewport: Viewport = {
   themeColor: "#0D0D0D",
   width: "device-width",
   initialScale: 1,
-  // Let env(safe-area-inset-*) resolve so the apply modal clears the home bar.
-  viewportFit: "cover",
 };
 
 /** Pre-render one static page per supported language. */

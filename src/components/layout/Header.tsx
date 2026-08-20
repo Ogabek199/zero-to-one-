@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { useLanguage } from "@/context/LanguageContext";
+import { useApply } from "@/context/ApplyContext";
 import { Logo } from "@/components/ui/Logo";
 import { Container } from "@/components/ui/Container";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -10,6 +11,7 @@ import { MobileMenu } from "./MobileMenu";
 
 export function Header() {
   const { t } = useLanguage();
+  const { isOpen: applyOpen } = useApply();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
@@ -46,7 +48,7 @@ export function Header() {
   return (
     <header
       className={`fixed top-0 left-0 z-50 w-full bg-brand-black transition-transform duration-300 ${
-        showHeader ? "translate-y-0" : "-translate-y-full"
+        showHeader || applyOpen ? "translate-y-0" : "-translate-y-full"
       }`}
     >
       <Container className="flex items-center justify-between py-3.5">
