@@ -54,6 +54,12 @@ export interface LocaleSeo {
   keywords: string[];
 }
 
+/** Google and Yandex search console verification tokens (optional). */
+export const VERIFICATION = {
+  google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
+};
+
 /**
  * Per-language SEO copy. Descriptions are kept in the 140–160 character sweet
  * spot and lead with the strongest hook (40 days → MVP → first sales →
@@ -72,6 +78,7 @@ export const SEO: Record<Locale, LocaleSeo> = {
       "zerotoone.uz",
       "www.zerotoone.uz",
       "zero to one uzbekistan",
+      "zero to one akselerator",
       "startap akselerator",
       "startap O'zbekiston",
       "startap Toshkent",
@@ -82,7 +89,9 @@ export const SEO: Record<Locale, LocaleSeo> = {
       "startap ariza",
       "startap 40 kun",
       "venchur investitsiya",
-      "IT startap",
+      "IT startap O'zbekiston",
+      "startap loyiha",
+      "investitsiya jalb qilish",
     ],
   },
   ru: {
@@ -96,6 +105,7 @@ export const SEO: Record<Locale, LocaleSeo> = {
       "zerotoone.uz",
       "www.zerotoone.uz",
       "zero to one uzbekistan",
+      "zero to one акселератор",
       "стартап акселератор",
       "акселератор Узбекистан",
       "стартап Ташкент",
@@ -107,6 +117,7 @@ export const SEO: Record<Locale, LocaleSeo> = {
       "стартап за 40 дней",
       "венчурные инвестиции",
       "IT стартапы Узбекистан",
+      "привлечение инвестиций стартап",
     ],
   },
   en: {
@@ -130,6 +141,7 @@ export const SEO: Record<Locale, LocaleSeo> = {
       "apply to accelerator",
       "40 day startup program",
       "venture funding",
+      "Uzbekistan tech startups",
     ],
   },
 };

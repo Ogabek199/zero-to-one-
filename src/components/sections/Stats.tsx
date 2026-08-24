@@ -8,8 +8,9 @@ export function Stats() {
   const { t } = useLanguage();
 
   return (
-    <section id="dastur" className="bg-white">
+    <section id="dastur" className="bg-white" aria-label="Dastur haqida raqamlar">
       <Container className="py-16 sm:py-24">
+        <h2 className="sr-only">Dastur ko'rsatkichlari va raqamlar</h2>
         {/* Right-aligned column on desktop, full width on mobile */}
         <div className="md:ml-auto md:w-1/2">
           <dl className="flex flex-col">

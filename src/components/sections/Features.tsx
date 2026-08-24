@@ -8,8 +8,9 @@ export function Features() {
   const { t } = useLanguage();
 
   return (
-    <section className="bg-brand-gray">
+    <section className="bg-brand-gray" aria-label="Afzalliklar / Preimushchestva">
       <Container className="py-16 sm:py-24">
+        <h2 className="sr-only">Afzalliklar va imkoniyatlar</h2>
         <div className="md:ml-auto md:w-1/2">
           <div className="flex flex-col gap-10">
             {t.features.map((f, i) => (

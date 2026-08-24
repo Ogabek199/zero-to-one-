@@ -15,6 +15,7 @@ import {
   HTML_LANG,
   localeUrl,
   alternatesLanguages,
+  VERIFICATION,
 } from "@/lib/seo";
 
 export const viewport: Viewport = {
@@ -80,7 +81,8 @@ export async function generateMetadata({
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: SITE_NAME,
+          alt: `${SITE_NAME} — ${seo.shortTitle}`,
+          type: "image/jpeg",
         },
       ],
     },
@@ -89,6 +91,7 @@ export async function generateMetadata({
       title: seo.shortTitle,
       description: seo.description,
       images: [ogImageUrl],
+      creator: "@zerotoone",
     },
     robots: {
       index: true,
@@ -100,6 +103,18 @@ export async function generateMetadata({
         "max-snippet": -1,
         "max-video-preview": -1,
       },
+    },
+    verification: {
+      google: VERIFICATION.google,
+      yandex: VERIFICATION.yandex,
+    },
+    appleWebApp: {
+      capable: true,
+      title: SITE_NAME,
+      statusBarStyle: "black-translucent",
+    },
+    formatDetection: {
+      telephone: false,
     },
     // Icons (favicon.ico, icon.svg, apple-icon.png) are auto-detected by
     // Next.js from the files in the `app/` directory — no manual config needed.

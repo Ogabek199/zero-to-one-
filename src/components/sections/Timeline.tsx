@@ -8,8 +8,9 @@ export function Timeline() {
   const { t } = useLanguage();
 
   return (
-    <section id="shartlar" className="bg-white">
+    <section id="shartlar" className="bg-white" aria-label="Dastur bosqichlari va shartlari">
       <Container className="py-16 sm:py-24">
+        <h2 className="sr-only">Dastur bosqichlari va shartlari</h2>
         <div className="flex flex-col">
           {t.timeline.map((item, i) => (
             <Reveal key={item.index} variant="fade-up" delay={i * 100} duration={750}>
