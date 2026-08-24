@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <main className="pt-20">
+      <main className="pt-[calc(5rem+env(safe-area-inset-top,0px))]">
         <Hero />
         <Stats />
         <Features />

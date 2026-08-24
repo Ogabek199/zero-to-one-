@@ -22,16 +22,16 @@ export function Hero() {
 
           {/* Headlines sit on crimson backing boxes so they stay readable
               wherever they overlap the white shape (poster style). */}
-          <Reveal className="relative z-10 max-w-4xl">
-            <h1 className="display whitespace-pre-line text-[7vw] leading-[1.02] text-white sm:whitespace-normal sm:text-6xl md:text-7xl lg:text-[86px]">
+          <Reveal variant="fade-left" duration={850} className="relative z-10 max-w-4xl">
+            <h1 className="display whitespace-pre-line text-[7.5vw] leading-[1.02] text-white sm:text-6xl md:text-7xl lg:text-[86px]">
               <span className="box-decoration-clone bg-[#DE2A41] px-2 py-0.5">
                 {t.hero.titleTop}
               </span>
             </h1>
           </Reveal>
 
-          <Reveal delay={120} className="relative z-10 mt-12 flex justify-start sm:mt-28 sm:justify-end lg:mt-40">
-            <h2 className="display mt-0 max-w-[764px] whitespace-pre-line text-left text-[7vw] leading-[1.02] text-white sm:mt-12 sm:whitespace-normal sm:text-right sm:text-5xl md:text-6xl lg:text-[68px]">
+          <Reveal variant="fade-right" delay={160} duration={850} className="relative z-10 mt-8 flex justify-end sm:mt-28 lg:mt-40">
+            <h2 className="display mt-0 max-w-[764px] whitespace-pre-line text-right text-[7.5vw] leading-[1.02] text-white sm:mt-12 sm:text-5xl md:text-6xl lg:text-[68px]">
               <span className="box-decoration-clone bg-[#DE2A41] px-2 py-0.5">
                 {t.hero.titleBottom}
               </span>
@@ -39,9 +39,9 @@ export function Hero() {
           </Reveal>
         </div>
 
-        <Reveal delay={240} className="relative z-10 mt-10 sm:mt-14 md:w-1/2 md:ml-auto">
+        <Reveal variant="fade-up" delay={300} duration={850} className="relative z-10 mt-10 sm:mt-14 md:w-1/2 md:ml-auto">
           <div className="flex justify-start">
-            <p className="w-full max-w-[510px] font-sans text-[20px] leading-[115%] tracking-[-2%] text-[#FFFFFF] sm:text-[32px] sm:leading-[90%] sm:tracking-[-4%] sm:text-start">
+            <p className="w-full max-w-[510px] font-sans font-normal text-[18px] leading-[125%] tracking-[-1%] text-[#FFFFFF] sm:text-[28px] sm:leading-[95%] sm:tracking-[-2%] sm:text-start">
               {t.hero.body}
             </p>
           </div>
@@ -60,7 +60,7 @@ export function Hero() {
           </Button>
 
           <div className="mt-4 flex justify-start sm:justify-end">
-            <p className="w-full font-sans text-[14px] tracking-[-2%] leading-[110%] text-[#FFFFFF] sm:text-[16px] sm:text-center">
+            <p className="w-full font-sans font-normal text-[14px] tracking-[-1%] leading-[110%] text-[#FFFFFF] sm:text-[15px] sm:text-center">
               {t.hero.note}
             </p>
           </div>

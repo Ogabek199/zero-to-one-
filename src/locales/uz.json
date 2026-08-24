@@ -12,7 +12,7 @@
     "titleBottom": "Biz ularni siz bilan\nbirga quramiz.",
     "body": "40 kun davomida siz loyihasini MVP va birinchi sotuvlargacha olib borasiz. Eng yaxshilari 10 000 dan 100 000 dollaragucha investitsiya oladi.",
     "cta": "Ariza topshirish",
-    "note": "Qatnashish - bepul. Muddati — 22.22.2026."
+    "note": "Qatnashish - bepul. Muddati — 22.22.2026"
   },
   "stats": [
     {
@@ -108,8 +108,8 @@
     "verdictTail": " Bizga aksini ko'rsating."
   },
   "cta": {
-    "titleTop": "Buning har holda qurasiz",
-    "titleBottom": "Biz faqat tezlashtiramiz.",
+    "titleTop": "Buning har\nholda qurasiz",
+    "titleBottom": "Biz faqat\ntezlashtiramiz.",
     "body": "Ariza 2-3 soat vaqt oladi. Siz allaqachon nima qilgangiz va mijozlardan nima o'rgangingizni ko'rsating. Bu birinchi filter.",
     "button": "Arizani boshlash"
   },
@@ -242,12 +242,12 @@
         "title": "Video · 2 daqiqa",
         "sublabel": "Montajsiz 2 daqiqa yozing, telefon kamerasi yetarli, uchta tildan istalganida. Ikkita savol: nega bu muammoni aynan siz hal qilishingiz kerak? Oxirgi 30 kunda yechimga yaqinlashish uchun nima qildingiz?",
         "video": {
-          "label": "Video",
+          "label": "Video havolasi",
           "dropTitle": "Faylni tanlang yoki bu yerga tashlang",
           "dropHint": "MP4, MOV (maks. 100MB)",
           "uploadBtn": "Yuklash",
           "or": "Yoki",
-          "linkLabel": "Yoki havola joylashtiring",
+          "linkLabel": "Video havolasi",
           "linkPlaceholder": "YouTube (unlisted) yoki Google Drive — havola",
           "uploading": "Yuklanmoqda…",
           "uploaded": "Yuklandi",
@@ -299,7 +299,7 @@
       "telegram": "Telegram username @ bilan boshlanishi kerak",
       "url": "To'g'ri havola kiriting (https://...)",
       "checklist": "Davom etish uchun barcha shartlarni tasdiqlang",
-      "video": "Video fayl yuklang yoki havola qo'shing",
+      "video": "Video havolasini kiriting",
       "submit": "Arizani yuborib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring."
     }
   }

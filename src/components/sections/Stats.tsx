@@ -14,19 +14,19 @@ export function Stats() {
         <div className="md:ml-auto md:w-1/2">
           <dl className="flex flex-col">
             {t.stats.map((s, i) => (
-              <Reveal key={s.value} delay={i * 70}>
-              <div
-                className={`border-b border-brand-black ${
-                  i === 0 ? "" : "pt-8 sm:pt-3"
-                }`}
-              >
-                <dt className="display font-bold text-[32px] leading-[90%] tracking-[-4%] text-brand-black sm:text-3xl">
-                  {s.value}
-                </dt>
-                <dd className="mt-1 mb-8 sm:mb-3 font-medium font-sans text-2xl leading-[110%] tracking-[-2%] text-[#666666]">
-                  {s.label}
-                </dd>
-              </div>
+              <Reveal key={s.value} variant="fade-up" delay={i * 90} duration={750}>
+                <div
+                  className={`group border-b border-brand-black transition-all duration-300 hover:border-[#DE2A41] ${
+                    i === 0 ? "" : "pt-8 sm:pt-4"
+                  }`}
+                >
+                  <dt className="display text-[32px] leading-[90%] tracking-[-4%] text-brand-black transition-all duration-300 group-hover:translate-x-1 group-hover:text-[#DE2A41] sm:text-3xl">
+                    {s.value}
+                  </dt>
+                  <dd className="mt-1 mb-8 sm:mb-4 font-normal font-sans text-xl sm:text-2xl leading-[110%] tracking-[-2%] text-[#666666] transition-colors duration-300 group-hover:text-brand-black">
+                    {s.label}
+                  </dd>
+                </div>
               </Reveal>
             ))}
           </dl>

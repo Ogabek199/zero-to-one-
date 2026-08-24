@@ -31,7 +31,12 @@ export function JsonLd({ locale }: { locale: Locale }) {
         logo,
         image: logo,
         description: seo.description,
-        sameAs: [SOCIAL.telegram, SOCIAL.instagram],
+        sameAs: [
+          SOCIAL.telegram,
+          SOCIAL.instagram,
+          SOCIAL.facebook,
+          SOCIAL.linkedin,
+        ],
         areaServed: "UZ",
       },
       {

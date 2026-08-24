@@ -9,7 +9,7 @@
   },
   "hero": {
     "titleTop": "We don't teach\nstartups.",
-    "titleBottom": "We build them\ntogether with you.",
+    "titleBottom": "We build them\ntogether\nwith you.",
     "body": "In 40 days, you'll bring your project to MVP\nand first sales. The best ones get investments\nfrom $10,000 to $100,000.",
     "cta": "Apply",
     "note": "Participation is free. Deadline: 22.22.2026."
@@ -108,8 +108,8 @@
     "verdictTail": " Prove us wrong."
   },
   "cta": {
-    "titleTop": "You'll build this anyway",
-    "titleBottom": "We just speed it up.",
+    "titleTop": "You'll build\nthis anyway",
+    "titleBottom": "We just\nspeed it up.",
     "body": "The application takes 2–3 hours. Show us what you've already created and what you've learned from customers. This is the first filter.",
     "button": "Start the application"
   },
@@ -242,12 +242,12 @@
         "title": "Video · 2 minutes",
         "sublabel": "Record 2 minutes with no editing, a phone camera is enough, in any of the three languages. Two questions: why should you specifically solve this problem? What have you done in the last 30 days to get closer to a solution?",
         "video": {
-          "label": "Video",
+          "label": "Video link",
           "dropTitle": "Choose a file or drop it here",
           "dropHint": "MP4, MOV (max. 100MB)",
           "uploadBtn": "Upload",
           "or": "Or",
-          "linkLabel": "Or paste a link",
+          "linkLabel": "Video link",
           "linkPlaceholder": "YouTube (unlisted) or Google Drive — link",
           "uploading": "Uploading…",
           "uploaded": "Uploaded",
@@ -299,7 +299,7 @@
       "telegram": "Telegram username must start with @",
       "url": "Enter a valid link (https://...)",
       "checklist": "Confirm all the terms to continue",
-      "video": "Upload a video file or add a link",
+      "video": "Please enter a video link",
       "submit": "Could not send your application. Check your connection and try again."
     }
   }

@@ -9,7 +9,14 @@
 
 import { CONTENT, LOCALES, type Locale } from "@/data/content";
 import type { ApplyPayload } from "@/lib/apply-types";
-import { escapeHtml } from "@/lib/telegram.server";
+
+/** Escapes the characters that matter for Telegram's HTML parse mode. */
+export function escapeHtml(input: string): string {
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
 
 /** Any single answer longer than this is truncated before it leaves the API. */
 const MAX_ANSWER_CHARS = 4000;
@@ -26,7 +33,24 @@ const isValidPhone = (v: string) => {
 };
 
 const isValidTelegram = (v: string) => /^@[A-Za-z0-9_]{4,}$/.test(v.trim());
-const isValidUrl = (v: string) => /^https?:\/\/[^\s.]+\.[^\s]+$/i.test(v.trim());
+
+const isValidUrl = (v: string) => {
+  const s = v.trim();
+  if (!s) return false;
+  try {
+    const url = new URL(/^https?:\/\//i.test(s) ? s : `https://${s}`);
+    return url.hostname.includes(".");
+  } catch {
+    return false;
+  }
+};
+
+function normalizeUrl(raw: string): string {
+  const v = raw.trim();
+  if (!v) return "";
+  if (/^https?:\/\//i.test(v)) return v;
+  return `https://${v}`;
+}
 
 export function isLocale(value: unknown): value is Locale {
   return typeof value === "string" && LOCALES.includes(value as Locale);
@@ -70,20 +94,12 @@ export function validatePayload(payload: ApplyPayload): string[] {
       if (!all) problems.push(`checklist_${i}`);
     } else if (step.kind === "video") {
       const link = clean(payload.values[`video_link_${i}`]);
-      const hasFile = !!payload.video?.url;
-      if (!hasFile && isBlank(link)) problems.push(`video_${i}`);
-      else if (!hasFile && !isValidUrl(link)) problems.push(`video_${i}`);
+      if (isBlank(link)) problems.push(`video_${i}`);
+      else if (!isValidUrl(link)) problems.push(`video_${i}`);
     }
   });
 
   return problems;
-}
-
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  const kb = bytes / 1024;
-  if (kb < 1024) return `${Math.round(kb)} KB`;
-  return `${(kb / 1024).toFixed(1)} MB`;
 }
 
 /** `20.08.2026, 16:40` in Tashkent time, regardless of where the server runs. */
@@ -110,43 +126,57 @@ export function buildTelegramMessage(payload: ApplyPayload): string {
 
   lines.push("🚀 <b>YANGI ARIZA — ZERO TO ONE</b>");
   lines.push(
-    `🌐 ${payload.locale.toUpperCase()}  ·  🕒 ${escapeHtml(nowInTashkent())}`,
+    `🌐 <b>Til:</b> ${payload.locale.toUpperCase()}  |  🕒 <b>Vaqt:</b> ${escapeHtml(nowInTashkent())}`,
   );
+  lines.push("━━━━━━━━━━━━━━━━━━━━");
   lines.push("");
 
-  // Contact block up top so the chat preview is immediately useful.
-  if (name) lines.push(`👤 <b>${escapeHtml(name)}</b>`);
-  if (phone) lines.push(`📞 <code>${escapeHtml(phone)}</code>`);
+  // Contact header
+  lines.push("👤 <b>ARIZA TOPSHIRUVCHI:</b>");
+  if (name) lines.push(`• <b>Ism:</b> ${escapeHtml(name)}`);
+  if (phone) lines.push(`• <b>Telefon:</b> <code>${escapeHtml(phone)}</code>`);
   if (telegram) {
     const handle = telegram.replace(/^@/, "");
-    lines.push(`💬 <a href="https://t.me/${encodeURIComponent(handle)}">${escapeHtml(telegram)}</a>`);
+    lines.push(`• <b>Telegram:</b> <a href="https://t.me/${encodeURIComponent(handle)}">${escapeHtml(telegram)}</a>`);
   }
-  if (city) lines.push(`📍 ${escapeHtml(city)}`);
+  if (city) lines.push(`• <b>Shahar:</b> ${escapeHtml(city)}`);
 
   let lastBlock = "";
 
   a.steps.forEach((step, i) => {
+    // Skip pure contact steps in the body (already in the top header)
+    const isPureContact =
+      step.kind === "fields" &&
+      (step.fields ?? []).every((f) => CONTACT_KEYS.has(f.key));
+    if (isPureContact) return;
+
     if (step.block && step.block !== lastBlock) {
       lastBlock = step.block;
       lines.push("");
-      lines.push(`━━ <b>${escapeHtml(step.block.toUpperCase())}</b> ━━`);
+      lines.push("━━━━━━━━━━━━━━━━━━━━");
+      lines.push(`📌 <b>${escapeHtml(step.block.toUpperCase())}</b>`);
     }
 
     if (step.kind === "fields" || step.kind === "links") {
-      for (const f of step.fields ?? []) {
-        // Already shown in the contact header — don't print them twice.
-        if (CONTACT_KEYS.has(f.key)) continue;
+      const activeFields = (step.fields ?? []).filter(
+        (f) => !CONTACT_KEYS.has(f.key),
+      );
+      for (const f of activeFields) {
         const val = clean(payload.values[f.key]);
         if (!val) continue;
         const label = escapeHtml(f.label ?? f.key);
-        lines.push("");
-        lines.push(`<b>${label}:</b> ${escapeHtml(val)}`);
+        if (isValidUrl(val)) {
+          const norm = normalizeUrl(val);
+          lines.push(`• <b>${label}:</b> <a href="${escapeHtml(norm)}">${escapeHtml(val)}</a>`);
+        } else {
+          lines.push(`• <b>${label}:</b> ${escapeHtml(val)}`);
+        }
       }
     } else if (step.kind === "textarea") {
       const val = clean(payload.values[`text_${i}`]);
       lines.push("");
-      lines.push(`<b>${escapeHtml(step.title)}</b>`);
-      lines.push(val ? escapeHtml(val) : "— (bo'sh)");
+      lines.push(`📝 <b>${escapeHtml(step.title)}:</b>`);
+      lines.push(val ? escapeHtml(val) : "<i>(kiritilmagan)</i>");
     } else if (step.kind === "checklist") {
       const options = step.options ?? [];
       const ticked = options.filter(
@@ -154,18 +184,24 @@ export function buildTelegramMessage(payload: ApplyPayload): string {
       ).length;
       lines.push("");
       lines.push(
-        `<b>${escapeHtml(step.title)}</b> — ✅ ${ticked}/${options.length}`,
+        `✅ <b>${escapeHtml(step.title)} (${ticked}/${options.length} tasdiqlandi):</b>`,
       );
+      options.forEach((opt, oi) => {
+        const isChecked = payload.checks[`check_${i}_${oi}`] === true;
+        lines.push(`  ${isChecked ? "✅" : "❌"} ${escapeHtml(opt)}`);
+      });
     } else if (step.kind === "video") {
       const link = clean(payload.values[`video_link_${i}`]);
       lines.push("");
-      lines.push(`<b>${escapeHtml(step.title)}</b>`);
-      if (payload.video?.url) {
-        const label = `${payload.video.name} · ${formatBytes(payload.video.size)}`;
-        lines.push(`🎬 <a href="${escapeHtml(payload.video.url)}">${escapeHtml(label)}</a>`);
+      lines.push(`🎬 <b>${escapeHtml(step.title)}:</b>`);
+      if (link) {
+        const norm = normalizeUrl(link);
+        lines.push(`🔗 <a href="${escapeHtml(norm)}">${escapeHtml(link)}</a>`);
+      } else if (payload.video?.url) {
+        lines.push(`🔗 <a href="${escapeHtml(payload.video.url)}">${escapeHtml(payload.video.url)}</a>`);
+      } else {
+        lines.push("<i>(kiritilmagan)</i>");
       }
-      if (link) lines.push(`🔗 ${escapeHtml(link)}`);
-      if (!payload.video?.url && !link) lines.push("— (yo'q)");
     }
   });
 

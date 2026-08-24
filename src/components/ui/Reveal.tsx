@@ -3,23 +3,35 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { clsx } from "@/lib/clsx";
 
+export type RevealVariant =
+  | "fade-up"
+  | "fade-down"
+  | "fade-left"
+  | "fade-right"
+  | "scale-up"
+  | "blur-in";
+
 interface RevealProps {
   children: ReactNode;
   /** Stagger, in milliseconds, applied as a transition delay. */
   delay?: number;
+  /** Animation variant (default: "fade-up") */
+  variant?: RevealVariant;
+  /** Duration in milliseconds (default: 800ms) */
+  duration?: number;
   className?: string;
 }
 
 /**
- * Fades its children up into place the first time they scroll into view.
- *
- * Cheap by design: no animation library, one shared-shape IntersectionObserver
- * per instance that unobserves itself after firing, and the animation itself
- * only touches `opacity` and `transform`, so it stays on the compositor and
- * never triggers layout. Users with "reduce motion" enabled — and browsers
- * without IntersectionObserver — get the content immediately, unanimated.
+ * High-performance landing page reveal component with spring easing and compositor transforms.
  */
-export function Reveal({ children, delay = 0, className }: RevealProps) {
+export function Reveal({
+  children,
+  delay = 0,
+  variant = "fade-up",
+  duration,
+  className,
+}: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,8 +43,6 @@ export function Reveal({ children, delay = 0, className }: RevealProps) {
       const previous = el.style.transition;
       el.style.transition = "none";
       el.classList.add("reveal-in");
-      // Force a reflow so the transition-less paint is committed before the
-      // original transition is put back.
       void el.offsetHeight;
       el.style.transition = previous;
     };
@@ -46,11 +56,6 @@ export function Reveal({ children, delay = 0, className }: RevealProps) {
       return;
     }
 
-    // Mounting part-way down the page — a language switch re-renders the whole
-    // tree, and a reload restores the previous offset — means everything the
-    // visitor has already read would otherwise animate again, or stay
-    // invisible above the fold. Anything at or above the current viewport is
-    // simply shown.
     if (window.scrollY > 0 && el.getBoundingClientRect().top < window.innerHeight) {
       showInstantly();
       return;
@@ -64,7 +69,7 @@ export function Reveal({ children, delay = 0, className }: RevealProps) {
           io.unobserve(entry.target);
         }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+      { rootMargin: "0px 0px -6% 0px", threshold: 0.08 },
     );
 
     io.observe(el);
@@ -74,8 +79,11 @@ export function Reveal({ children, delay = 0, className }: RevealProps) {
   return (
     <div
       ref={ref}
-      className={clsx("reveal", className)}
-      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+      className={clsx("reveal", `reveal-${variant}`, className)}
+      style={{
+        ...(delay ? { transitionDelay: `${delay}ms` } : {}),
+        ...(duration ? { transitionDuration: `${duration}ms` } : {}),
+      }}
     >
       {children}
     </div>

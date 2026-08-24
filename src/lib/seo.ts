@@ -8,23 +8,25 @@
  *
  * IMPORTANT: set `NEXT_PUBLIC_SITE_URL` in your environment (e.g. `.env.local`
  * and your hosting provider) to the real production origin, without a trailing
- * slash — e.g. `https://zerotoone.uz`. The value below is only a fallback.
+ * slash — e.g. `https://www.zerotoone.uz`. The value below is only a fallback.
  */
 
 import type { Locale } from "@/data/content";
 
 /** Production origin, no trailing slash. Override via env in deployment. */
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerotoone.uz"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.zerotoone.uz"
 ).replace(/\/$/, "");
 
 /** Brand / program name used across metadata and structured data. */
 export const SITE_NAME = "Zero to One";
 
-/** Social + contact handles. Update these to your real accounts. */
+/** Social + contact handles. */
 export const SOCIAL = {
-  telegram: "https://t.me/zerotoone",
-  instagram: "https://instagram.com/zerotoone",
+  telegram: "https://t.me/zerotoone_official",
+  instagram: "https://instagram.com/zerotoone.uz",
+  facebook: "https://facebook.com/zerotoone.uz",
+  linkedin: "https://linkedin.com/company/zerotooneuz",
 } as const;
 
 /** Default social-share image (Open Graph / Twitter). 1200×630 recommended. */
@@ -66,6 +68,10 @@ export const SEO: Record<Locale, LocaleSeo> = {
     description:
       "Biz startaplarga o'qitmaymiz — ularni siz bilan birga quramiz. 40 kun oflayn, MVP va birinchi sotuvlar, eng yaxshilariga $10 000–$100 000 investitsiya. Ishtirok bepul.",
     keywords: [
+      "Zero to One",
+      "zerotoone.uz",
+      "www.zerotoone.uz",
+      "zero to one uzbekistan",
       "startap akselerator",
       "startap O'zbekiston",
       "startap Toshkent",
@@ -74,8 +80,9 @@ export const SEO: Record<Locale, LocaleSeo> = {
       "biznes akselerator",
       "founder dasturi",
       "startap ariza",
-      "Zero to One",
       "startap 40 kun",
+      "venchur investitsiya",
+      "IT startap",
     ],
   },
   ru: {
@@ -85,6 +92,10 @@ export const SEO: Record<Locale, LocaleSeo> = {
     description:
       "Мы не учим стартапам — мы строим их вместе с вами. 40 дней офлайн, MVP и первые продажи, лучшим — инвестиции $10 000–$100 000. Участие бесплатное.",
     keywords: [
+      "Zero to One",
+      "zerotoone.uz",
+      "www.zerotoone.uz",
+      "zero to one uzbekistan",
       "стартап акселератор",
       "акселератор Узбекистан",
       "стартап Ташкент",
@@ -93,8 +104,9 @@ export const SEO: Record<Locale, LocaleSeo> = {
       "бизнес акселератор",
       "программа для фаундеров",
       "заявка в акселератор",
-      "Zero to One",
       "стартап за 40 дней",
+      "венчурные инвестиции",
+      "IT стартапы Узбекистан",
     ],
   },
   en: {
@@ -104,6 +116,10 @@ export const SEO: Record<Locale, LocaleSeo> = {
     description:
       "We don't teach startups — we build them with you. 40 days offline, MVP and first revenue, with $10,000–$100,000 in investment for the best teams. Free to join.",
     keywords: [
+      "Zero to One",
+      "zerotoone.uz",
+      "www.zerotoone.uz",
+      "zero to one accelerator",
       "startup accelerator",
       "accelerator Uzbekistan",
       "startup Tashkent",
@@ -112,8 +128,8 @@ export const SEO: Record<Locale, LocaleSeo> = {
       "founder program",
       "pre-seed accelerator",
       "apply to accelerator",
-      "Zero to One",
       "40 day startup program",
+      "venture funding",
     ],
   },
 };

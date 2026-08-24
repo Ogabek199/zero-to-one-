@@ -8,7 +8,6 @@ import type { ApplyPayload } from "@/lib/apply-types";
 import {
   getTelegramConfig,
   sendTelegramMessage,
-  sendTelegramVideoByUrl,
 } from "@/lib/telegram.server";
 
 /**
@@ -22,11 +21,8 @@ import {
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-/** Reject oversized bodies outright — the video never travels through here. */
+/** Reject oversized bodies outright. */
 const MAX_BODY_BYTES = 128 * 1024;
-
-/** Telegram refuses to fetch a remote file larger than ~20 MB. */
-const TELEGRAM_URL_FETCH_LIMIT = 20 * 1024 * 1024;
 
 /* ---- naive per-instance rate limit ---------------------------------- */
 
@@ -103,11 +99,6 @@ export async function POST(req: NextRequest) {
         : null,
   };
 
-  // Only accept a video URL we ourselves issued.
-  if (payload.video && !/^https:\/\/[a-z0-9.-]*\.vercel-storage\.com\//i.test(payload.video.url)) {
-    return NextResponse.json({ error: "invalid_video_url" }, { status: 400 });
-  }
-
   const problems = validatePayload(payload);
   if (problems.length > 0) {
     return NextResponse.json(
@@ -129,13 +120,6 @@ export async function POST(req: NextRequest) {
   if (!sent.ok) {
     console.error(`[apply] Telegram rejected the message: ${sent.description}`);
     return NextResponse.json({ error: "send_failed" }, { status: 502 });
-  }
-
-  // Bonus: drop the clip into the chat when it is small enough for Telegram to
-  // fetch it itself. Failure here is silent — the link is already delivered.
-  if (payload.video && payload.video.size <= TELEGRAM_URL_FETCH_LIMIT) {
-    const who = payload.values.name ?? "";
-    await sendTelegramVideoByUrl(cfg, payload.video.url, `🎬 ${who}`);
   }
 
   return NextResponse.json({ ok: true });

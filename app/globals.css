@@ -57,9 +57,9 @@
     sans-serif;
   --font-body: "TT Norms Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Height of the sticky header: logo mark (46px) + 2 × 14px padding.
+  /* Height of the sticky header: logo mark (46px) + 2 × 14px padding + safe area.
      The apply modal starts right below it on mobile. */
-  --header-h: 74px;
+  --header-h: calc(74px + env(safe-area-inset-top, 0px));
 }
 
 html {
@@ -69,7 +69,7 @@ html {
 /* Anchor targets sit under the sticky header — offset the jump so the
    section heading is not hidden behind it. */
 section[id] {
-  scroll-margin-top: 72px;
+  scroll-margin-top: calc(72px + env(safe-area-inset-top, 0px));
 }
 
 
@@ -88,40 +88,85 @@ body {
   background-color: #0d0d0d;
   color: #0d0d0d;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
 @layer components {
-  /* Heavy display heading */
+  /* Clean display heading */
   .display {
-    @apply font-display font-extrabold uppercase leading-[0.95] tracking-tight;
+    @apply font-display font-bold uppercase leading-[0.95] tracking-tight;
   }
 }
 
 /* ------------------------------------------------------------------ */
-/*  Scroll reveal                                                      */
-/*  Only opacity + transform are animated, so the browser keeps the    */
-/*  work on the compositor (no layout, no paint). See ui/Reveal.tsx.   */
+/*  Modern Landing Page Scroll Reveals & Micro-interactions           */
+/*  Using hardware-accelerated transforms & Apple-style cubic-bezier  */
 /* ------------------------------------------------------------------ */
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
     opacity: 0;
-    transform: translate3d(0, 18px, 0);
-    transition:
-      opacity 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
-      transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+    will-change: opacity, transform, filter;
+    transition-property: opacity, transform, filter;
+    transition-duration: 0.8s;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-fade-up {
+    transform: translate3d(0, 36px, 0);
+    filter: blur(4px);
+  }
+
+  .reveal-fade-down {
+    transform: translate3d(0, -36px, 0);
+    filter: blur(4px);
+  }
+
+  .reveal-fade-left {
+    transform: translate3d(-48px, 0, 0);
+    filter: blur(4px);
+  }
+
+  .reveal-fade-right {
+    transform: translate3d(48px, 0, 0);
+    filter: blur(4px);
+  }
+
+  .reveal-scale-up {
+    transform: scale(0.92) translate3d(0, 24px, 0);
+    filter: blur(4px);
+  }
+
+  .reveal-blur-in {
+    transform: scale(0.97);
+    filter: blur(12px);
   }
 }
 
 .reveal-in {
-  opacity: 1;
-  transform: none;
+  opacity: 1 !important;
+  transform: translate3d(0, 0, 0) scale(1) !important;
+  filter: blur(0) !important;
 }
 
 /* Without JS the observer never runs, so never hide anything. */
 @media (scripting: none) {
   .reveal {
-    opacity: 1;
-    transform: none;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Landing page interactive micro-animations                         */
+/* ------------------------------------------------------------------ */
+.card-hover-effect {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-2px);
 }

@@ -43,10 +43,10 @@ export function LanguageSwitcher({
             onClick={() => setLocale(code)}
             aria-pressed={active}
             className={clsx(
-              "px-2.5 py-1 text-xs font-semibold tracking-wide transition-colors",
+              "px-2.5 py-1 text-xs font-semibold tracking-wide transition-all duration-200 active:scale-95",
               active
-                ? "bg-black text-white"
-                : "bg-white text-black",
+                ? "bg-black text-white shadow-sm"
+                : "bg-white text-black hover:bg-neutral-100",
             )}
           >
             {LABELS[code]}

@@ -1,13 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { upload as uploadToBlob } from "@vercel/blob/client";
 import { useApply } from "@/context/ApplyContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { Logo } from "@/components/ui/Logo";
 import { clsx } from "@/lib/clsx";
-import type { ApplyContent, ApplyStep, ApplyVideoCopy } from "@/data/content";
-import { MAX_VIDEO_BYTES, type ApplyPayload } from "@/lib/apply-types";
+import type { ApplyContent, ApplyStep } from "@/data/content";
+import type { ApplyPayload } from "@/lib/apply-types";
 
 type Phase = "intro" | "form" | "success";
 
@@ -22,30 +21,6 @@ const EMPTY_DRAFT: DraftState = { values: {}, checks: {} };
 const DEFAULT_SUBMITTING = "…";
 const DEFAULT_SUBMIT_ERROR =
   "Arizani yuborib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring.";
-
-/* ---- file upload state ---- */
-
-type UploadStatus = "uploading" | "done" | "error";
-
-interface UploadState {
-  name: string;
-  size: number;
-  /** Bytes actually transferred so far — drives the progress bar. */
-  loaded: number;
-  status: UploadStatus;
-  /** Public Blob URL, set once the upload finishes. */
-  url?: string;
-}
-
-const UPLOAD_OK_GREEN = "#16a34a";
-
-function formatSize(bytes: number): string {
-  if (!bytes) return "0 KB";
-  if (bytes < 1024) return `${bytes} B`;
-  const kb = bytes / 1024;
-  if (kb < 1024) return `${Math.round(kb)} KB`;
-  return `${(kb / 1024).toFixed(1)} MB`;
-}
 
 /* ---- formatters ---- */
 
@@ -80,13 +55,21 @@ const isValidPhone = (v: string) => {
   return d.length === 9;
 };
 const isValidTelegram = (v: string) => /^@[A-Za-z0-9_]{4,}$/.test(v);
-const isValidUrl = (v: string) => /^https?:\/\/[^\s.]+\.[^\s]+$/i.test(v.trim());
+const isValidUrl = (v: string) => {
+  const s = v.trim();
+  if (!s) return false;
+  try {
+    const url = new URL(/^https?:\/\//i.test(s) ? s : `https://${s}`);
+    return url.hostname.includes(".");
+  } catch {
+    return false;
+  }
+};
 
 function validateStep(
   step: ApplyStep,
   stepIndex: number,
   draft: DraftState,
-  uploadDone: boolean,
   err: ApplyContent["errors"],
 ): Record<string, string> {
   const e: Record<string, string> = {};
@@ -120,10 +103,9 @@ function validateStep(
     if (!all) e[`checklist_${stepIndex}`] = err.checklist;
   } else if (step.kind === "video") {
     const link = draft.values[`video_link_${stepIndex}`] ?? "";
-    // The video counts as provided only once the file finished uploading.
-    if (!uploadDone && isBlank(link)) {
+    if (isBlank(link)) {
       e[`video_${stepIndex}`] = err.video;
-    } else if (!uploadDone && !isBlank(link) && !isValidUrl(link)) {
+    } else if (!isValidUrl(link)) {
       e[`video_${stepIndex}`] = err.url;
     }
   }
@@ -133,8 +115,8 @@ function validateStep(
 
 /* Footer buttons: full-width and finger-sized on mobile, unchanged on desktop. */
 const btnBase =
-  "w-full px-6 py-4 font-sans text-[13px] font-bold uppercase tracking-[0.08em] transition-colors sm:px-8 sm:py-3.5";
-const primaryBtn = `${btnBase} bg-[#DE2A41] text-white hover:bg-[#B2333C]`;
+  "w-full px-6 py-4 font-sans text-[13px] font-bold uppercase tracking-[0.08em] transition-all duration-200 active:scale-[0.98] sm:px-8 sm:py-3.5 cursor-pointer select-none";
+const primaryBtn = `${btnBase} bg-[#DE2A41] text-white hover:bg-[#B2333C] shadow-md hover:shadow-lg`;
 const ghostBtn = `${btnBase} border border-brand-black text-brand-black hover:bg-brand-black hover:text-white`;
 
 export function ApplyModal() {
@@ -145,16 +127,11 @@ export function ApplyModal() {
   const [phase, setPhase] = useState<Phase>("intro");
   const [step, setStep] = useState(0);
   const [draft, setDraft] = useState<DraftState>(EMPTY_DRAFT);
-  const [upload, setUpload] = useState<UploadState | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
-  /** Keeps the picked File so "retry" can re-run the upload. */
-  const uploadFileRef = useRef<File | null>(null);
-  /** Lets "cancel" abort an upload that is still in flight. */
-  const uploadAbortRef = useRef<AbortController | null>(null);
   /** Honeypot: bots fill this in, humans never see it. */
   const hpRef = useRef<HTMLInputElement>(null);
 
@@ -167,10 +144,6 @@ export function ApplyModal() {
     setPhase("intro");
     setStep(0);
     setDraft(EMPTY_DRAFT);
-    setUpload(null);
-    uploadFileRef.current = null;
-    uploadAbortRef.current?.abort();
-    uploadAbortRef.current = null;
     setErrors({});
     setSubmitting(false);
     setSubmitError(null);
@@ -293,10 +266,6 @@ export function ApplyModal() {
       locale,
       values: draft.values,
       checks: draft.checks,
-      video:
-        upload?.status === "done" && upload.url
-          ? { url: upload.url, name: upload.name, size: upload.size }
-          : null,
       hp: hpRef.current?.value ?? "",
     };
 
@@ -314,12 +283,11 @@ export function ApplyModal() {
     } finally {
       setSubmitting(false);
     }
-  }, [a.errors.submit, draft, locale, submitting, upload]);
+  }, [a.errors.submit, draft, locale, submitting]);
 
   const handleNext = () => {
     if (!current || submitting) return;
-    const uploadDone = upload?.status === "done" && !!upload.url;
-    const stepErrors = validateStep(current, step, draft, uploadDone, a.errors);
+    const stepErrors = validateStep(current, step, draft, a.errors);
     if (Object.keys(stepErrors).length > 0) {
       setErrors(stepErrors);
       return;
@@ -333,93 +301,6 @@ export function ApplyModal() {
     if (step > 0) goTo(step - 1);
     else setPhase("intro");
   };
-
-  /* ---- file upload actions ---- */
-
-  const clearVideoErrors = useCallback(() => {
-    setErrors((prev) => {
-      const keys = Object.keys(prev).filter((k) => k.startsWith("video_"));
-      if (keys.length === 0) return prev;
-      const next = { ...prev };
-      for (const k of keys) delete next[k];
-      return next;
-    });
-  }, []);
-
-  /**
-   * Uploads straight from the browser to Blob storage.
-   *
-   * The file never touches our API route — that route only mints a one-hour,
-   * video-only, 100 MB-capped token — so a full-size clip is not squeezed
-   * through the ~4.5 MB serverless body limit.
-   */
-  const beginUpload = useCallback(
-    async (file: File) => {
-      uploadFileRef.current = file;
-      clearVideoErrors();
-
-      if (!file.type.startsWith("video/") || file.size > MAX_VIDEO_BYTES) {
-        setUpload({
-          name: file.name,
-          size: file.size,
-          loaded: 0,
-          status: "error",
-        });
-        return;
-      }
-
-      uploadAbortRef.current?.abort();
-      const controller = new AbortController();
-      uploadAbortRef.current = controller;
-
-      setUpload({
-        name: file.name,
-        size: file.size,
-        loaded: 0,
-        status: "uploading",
-      });
-
-      try {
-        const result = await uploadToBlob(`applications/${file.name}`, file, {
-          access: "public",
-          handleUploadUrl: "/api/apply/upload",
-          // Parallel chunks with per-chunk retries: what makes a 100 MB
-          // upload survive a shaky mobile connection.
-          // multipart: true,
-          abortSignal: controller.signal,
-          onUploadProgress: ({ loaded }) => {
-            setUpload((u) =>
-              u && u.status === "uploading" ? { ...u, loaded } : u,
-            );
-          },
-        });
-
-        setUpload((u) =>
-          u
-            ? { ...u, loaded: file.size, status: "done", url: result.url }
-            : u,
-        );
-      } catch {
-        // An abort is a user action, not a failure — `clearUpload` already
-        // wiped the card, so only report a genuine error.
-        if (controller.signal.aborted) return;
-        setUpload((u) => (u ? { ...u, status: "error" } : u));
-      }
-    },
-    [clearVideoErrors],
-  );
-
-  const clearUpload = useCallback(() => {
-    uploadAbortRef.current?.abort();
-    uploadAbortRef.current = null;
-    uploadFileRef.current = null;
-    setUpload(null);
-  }, []);
-
-  const retryUpload = useCallback(() => {
-    const f = uploadFileRef.current;
-    if (f) void beginUpload(f);
-  }, [beginUpload]);
 
   // Every hook is declared above this guard, so the hook order stays stable
   // whether the modal is open or closed (React requires a constant hook count).
@@ -447,7 +328,7 @@ export function ApplyModal() {
       />
 
       {/* Card */}
-      <div className="relative flex h-full w-full min-w-0 max-w-none flex-col overflow-hidden border-brand-black bg-white shadow-2xl sm:h-auto sm:max-h-[92vh] sm:max-w-2xl sm:border">
+      <div className="relative flex h-full w-full min-w-0 max-w-none flex-col overflow-hidden border-brand-black bg-white shadow-2xl transition-all duration-300 sm:h-auto sm:max-h-[92vh] sm:max-w-2xl sm:border">
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-brand-black px-5 py-4 sm:px-8">
           <span className="display text-sm tracking-tight text-brand-black sm:text-base">
@@ -525,11 +406,6 @@ export function ApplyModal() {
                   errors={errors}
                   setValue={setValue}
                   toggleCheck={toggleCheck}
-                  upload={upload}
-                  onPickFile={beginUpload}
-                  onCancelUpload={clearUpload}
-                  onRemoveUpload={clearUpload}
-                  onRetryUpload={retryUpload}
                 />
               </div>
             </div>
@@ -659,11 +535,6 @@ function StepFields({
   errors,
   setValue,
   toggleCheck,
-  upload,
-  onPickFile,
-  onCancelUpload,
-  onRemoveUpload,
-  onRetryUpload,
 }: {
   step: ApplyStep;
   stepIndex: number;
@@ -671,11 +542,6 @@ function StepFields({
   errors: Record<string, string>;
   setValue: (key: string, val: string) => void;
   toggleCheck: (key: string, stepIndex: number) => void;
-  upload: UploadState | null;
-  onPickFile: (file: File) => void;
-  onCancelUpload: () => void;
-  onRemoveUpload: () => void;
-  onRetryUpload: () => void;
 }) {
   if (step.kind === "fields" || step.kind === "links") {
     return (
@@ -800,61 +666,11 @@ function StepFields({
     const err = errors[`video_${stepIndex}`];
     return (
       <div>
-        <span className={labelClass}>{v.label}</span>
-        <label
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            const f = e.dataTransfer.files?.[0];
-            if (f) onPickFile(f);
-          }}
-          className={clsx(
-            "flex cursor-pointer flex-col items-center gap-2 border border-dashed bg-brand-gray/60 px-4 py-7 text-center transition-colors hover:border-[#DE2A41] sm:px-6 sm:py-8",
-            err ? "border-[#DE2A41]" : "border-brand-black/30",
-          )}
-        >
-          <span className="font-sans text-[14px] font-medium text-brand-black/80">
-            {v.dropTitle}
-          </span>
-          <span className="font-sans text-[12px] text-brand-black/45">
-            {v.dropHint}
-          </span>
-          <span className="mt-2 border border-brand-black px-5 py-2 font-sans text-[12px] font-bold uppercase tracking-[0.08em] text-brand-black">
-            {v.uploadBtn}
-          </span>
-          <input
-            type="file"
-            accept="video/mp4,video/quicktime,video/*"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) onPickFile(f);
-              // Allow re-picking the same file (fires change again).
-              e.currentTarget.value = "";
-            }}
-            className="hidden"
-          />
+        <label htmlFor={linkKey} className={labelClass}>
+          {v.linkLabel || v.label}
         </label>
-
-        {upload && (
-          <UploadCard
-            upload={upload}
-            v={v}
-            onCancel={onCancelUpload}
-            onRemove={onRemoveUpload}
-            onRetry={onRetryUpload}
-          />
-        )}
-
-        <div className="my-6 flex items-center gap-4">
-          <span className="h-px flex-1 bg-brand-black/15" />
-          <span className="font-sans text-[11px] font-bold uppercase tracking-[0.12em] text-brand-black/40">
-            {v.or}
-          </span>
-          <span className="h-px flex-1 bg-brand-black/15" />
-        </div>
-
-        <label className={labelClass}>{v.linkLabel}</label>
         <input
+          id={linkKey}
           type="url"
           value={draft.values[linkKey] ?? ""}
           placeholder={v.linkPlaceholder}
@@ -873,172 +689,4 @@ function StepFields({
   }
 
   return null;
-}
-
-/* ------------------------------------------------------------------ */
-/*  Upload file card — uploading / done / error(+retry) states        */
-/* ------------------------------------------------------------------ */
-
-function UploadCard({
-  upload,
-  v,
-  onCancel,
-  onRemove,
-  onRetry,
-}: {
-  upload: UploadState;
-  v: ApplyVideoCopy;
-  onCancel: () => void;
-  onRemove: () => void;
-  onRetry: () => void;
-}) {
-  const isUploading = upload.status === "uploading";
-  const isDone = upload.status === "done";
-  const isError = upload.status === "error";
-  const pct =
-    upload.size > 0
-      ? Math.min(100, Math.round((upload.loaded / upload.size) * 100))
-      : 0;
-
-  return (
-    <div
-      className={clsx(
-        "mt-3 flex items-start gap-3 border p-3 transition-colors",
-        isError
-          ? "border-[#DE2A41] bg-[#DE2A41]/[0.04]"
-          : "border-brand-black/15 bg-white",
-      )}
-    >
-      {/* File icon */}
-      <span
-        className={clsx(
-          "mt-0.5 shrink-0",
-          isError ? "text-[#DE2A41]" : "text-brand-black/35",
-        )}
-      >
-        <svg width="20" height="24" viewBox="0 0 20 24" fill="none">
-          <path
-            d="M3 1.5h8L18 8v13.5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-19a1 1 0 0 1 1-1Z"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M11 1.5V8h6"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </span>
-
-      <div className="min-w-0 flex-1">
-        <div className="flex items-start justify-between gap-3">
-          <span className="truncate font-sans text-[13px] font-medium text-brand-black">
-            {upload.name}
-          </span>
-          <button
-            type="button"
-            onClick={isUploading ? onCancel : onRemove}
-            aria-label={isUploading ? v.cancel : v.remove}
-            className="shrink-0 text-brand-black/40 transition-colors hover:text-brand-black"
-          >
-            {isUploading ? (
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path
-                  d="M4 4l10 10M14 4L4 14"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path
-                  d="M3 5h12M7 5V3.5h4V5M4.5 5l.6 9.5a1 1 0 0 0 1 .9h5.8a1 1 0 0 0 1-.9L14.5 5M7.5 8v5M10.5 8v5"
-                  stroke="currentColor"
-                  strokeWidth="1.3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
-          </button>
-        </div>
-
-        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 font-sans text-[12px]">
-          <span className="tabular-nums text-brand-black/50">
-            {formatSize(upload.loaded)} {v.sizeOf} {formatSize(upload.size)}
-          </span>
-
-          {isDone && (
-            <span
-              className="flex items-center gap-1.5"
-              style={{ color: UPLOAD_OK_GREEN }}
-            >
-              <span
-                className="inline-block h-[7px] w-[7px] rounded-full"
-                style={{ backgroundColor: UPLOAD_OK_GREEN }}
-              />
-              {v.uploaded}
-            </span>
-          )}
-
-          {isUploading && (
-            <span className="flex items-center gap-1.5 text-brand-black/55">
-              <svg
-                className="animate-spin"
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="9"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeOpacity="0.25"
-                />
-                <path
-                  d="M21 12a9 9 0 0 0-9-9"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                />
-              </svg>
-              {v.uploading}
-            </span>
-          )}
-
-          {isError && (
-            <span className="flex items-center gap-1.5 text-[#DE2A41]">
-              <span className="inline-block h-[7px] w-[7px] rounded-full bg-[#DE2A41]" />
-              {v.failed}
-            </span>
-          )}
-        </div>
-
-        {isUploading && (
-          <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-brand-black/10">
-            <div
-              className="h-full rounded-full transition-[width] duration-100 ease-linear"
-              style={{ width: `${pct}%`, backgroundColor: UPLOAD_OK_GREEN }}
-            />
-          </div>
-        )}
-
-        {isError && (
-          <button
-            type="button"
-            onClick={onRetry}
-            className="mt-1.5 font-sans text-[12px] font-semibold text-[#DE2A41] underline underline-offset-2 transition-opacity hover:opacity-75"
-          >
-            {v.retry}
-          </button>
-        )}
-      </div>
-    </div>
-  );
 }

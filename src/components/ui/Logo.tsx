@@ -104,42 +104,45 @@ export function Logo({
     );
   }
 
-  const large = size === "lg" || size === "xl";
-  const d = MARK_SIZE[size];
-  const stroke = size === "xl" ? 4 : size === "lg" ? 3 : 2;
-  const r = d / 2 - stroke / 2 - (large ? 1.5 : 0.5);
-  // Distance between the two circle centres. Set to the sum of the radii
-  // (2 * r) so the circles only kiss at their edges instead of overlapping.
-  const overlap = 2 * r;
+  const heights: Record<NonNullable<LogoProps["size"]>, string> = {
+    sm: "h-[28px]",
+    md: "h-[36px]",
+    lg: "h-[64px]",
+    xl: "h-[108px]",
+  };
 
   return (
     <span
       className={clsx(
         "inline-flex items-center",
-        size === "xl" ? "gap-5" : "gap-2",
+        size === "xl" ? "gap-5" : size === "lg" ? "gap-3.5" : "gap-2.5",
         className,
       )}
     >
       <svg
-        width={d + overlap}
-        height={d}
-        viewBox={`0 0 ${d + overlap} ${d}`}
+        viewBox={FLUID_VIEWBOX}
         fill="none"
         aria-hidden="true"
-        className="shrink-0"
+        shapeRendering="geometricPrecision"
+        className={clsx("w-auto shrink-0", heights[size])}
       >
         <circle
-          cx={d / 2}
-          cy={d / 2}
-          r={r}
+          cx={FLUID_MARK_D / 2}
+          cy={FLUID_MARK_D / 2}
+          r={FLUID_R}
           stroke={color}
-          strokeWidth={stroke}
+          strokeWidth={FLUID_STROKE}
         />
-        <circle cx={overlap + d / 2} cy={d / 2} r={r} fill={color} />
+        <circle
+          cx={FLUID_OVERLAP + FLUID_MARK_D / 2}
+          cy={FLUID_MARK_D / 2}
+          r={FLUID_R}
+          fill={color}
+        />
       </svg>
       <span
         className={clsx(
-          "font-sans font-medium lowercase",
+          "shrink-0 font-sans font-medium lowercase select-none",
           TEXT_SIZE[size],
         )}
         style={{ color }}

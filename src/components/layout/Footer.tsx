@@ -57,16 +57,18 @@ export function Footer() {
 
           <Reveal delay={180} className="mt-14 w-full">
             {/* The lockup stretches the full width of its column (mobile: gutter-to-gutter, desktop: the right half). */}
-            <Logo variant="dark" fluid className="max-w-[86%]" />
+            <Logo variant="dark" fluid className="w-full" />
           </Reveal>
         </div>
       </Container>
 
       <div className="bg-brand-black">
         <Container className="py-[32px]">
-        <p className="text-left font-sans leading-[110%] tracking-[-4%] text-[16px] text-[#FFFFFF] sm:text-center">
-            {t.footer.rights}
-          </p>
+          <div className="md:ml-auto md:w-1/2 text-left">
+            <p className="font-sans leading-[110%] tracking-[-4%] text-[16px] text-[#FFFFFF]">
+              {t.footer.rights}
+            </p>
+          </div>
         </Container>
       </div>
     </footer>

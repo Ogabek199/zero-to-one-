@@ -85,7 +85,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
       aria-hidden={!open}
     >
       <div className="flex h-full flex-col bg-[#DE2A41]">
-        <div className="flex items-center justify-between bg-brand-black px-5 py-3.5">
+        <div className="flex items-center justify-between bg-brand-black px-5 py-3.5 pt-[max(0.875rem,calc(0.875rem+env(safe-area-inset-top,0px)))]">
           <Logo variant="light" size="md" />
           <button
             type="button"
